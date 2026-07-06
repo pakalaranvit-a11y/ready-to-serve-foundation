@@ -36,6 +36,11 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero__bg" aria-hidden="true">
+        <img
+          src="https://images.unsplash.com/photo-1559234938-b60fff04894d?fm=jpg&q=60&w=3000&auto=format&fit=crop"
+          alt=""
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+        />
         <div className="hero__scrim" />
       </div>
       <div className="wrap hero__inner">

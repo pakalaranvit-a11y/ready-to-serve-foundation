@@ -5,12 +5,11 @@ export default function About() {
     <section className="section about" id="about">
       <div className="wrap about__grid">
         <div className="about__media" data-reveal="">
-          <div className="media-card" style={{ background: "linear-gradient(135deg, #0b3d2e 0%, #1b9e5f 100%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "1.1rem", textAlign: "center", padding: "2rem" }}>
-            <div>
-              <div style={{ fontSize: "3rem", marginBottom: "0.5rem" }}>🙏</div>
-              <p style={{ margin: 0 }}>A resident shares his thanks</p>
-            </div>
-          </div>
+          <img
+            className="media-card"
+            src="https://images.unsplash.com/photo-1543333995-a78aea2eee50?fm=jpg&q=60&w=1200&auto=format&fit=crop"
+            alt="A caregiver assisting an elderly resident at the Ready To Serve Foundation home"
+          />
           <span className="media-card__tag">A resident shares his thanks</span>
         </div>
         <div className="about__copy" data-reveal="">

@@ -1,15 +1,14 @@
 import React from "react";
 import { CONFIG } from "@/lib/charityConfig";
 
-function StoryCard({ caption, emoji }) {
+function StoryCard({ caption, src, alt }) {
   return (
     <figure className="story" data-reveal="">
-      <div style={{ width: "100%", aspectRatio: "9/12", background: "linear-gradient(135deg, #0b3d2e, #157347)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
-        <div style={{ textAlign: "center", padding: "1.5rem" }}>
-          <div style={{ fontSize: "3rem", marginBottom: "0.5rem" }}>{emoji}</div>
-          <p style={{ margin: 0, fontSize: "0.95rem", opacity: 0.9 }}>{caption}</p>
-        </div>
-      </div>
+      <img
+        src={src}
+        alt={alt}
+        style={{ width: "100%", aspectRatio: "9/12", objectFit: "cover", display: "block" }}
+      />
       <figcaption>{caption}</figcaption>
     </figure>
   );
@@ -27,9 +26,21 @@ export default function Stories() {
           </p>
         </div>
         <div className="stories__grid">
-          <StoryCard caption="అన్నదాత! సుఖీభవ! — Blessings to every giver. A sponsored birthday at the home." emoji="🎂" />
-          <StoryCard caption="Our residents, together as a family." emoji="👨‍👩‍👧‍👦" />
-          <StoryCard caption="Everyday life and care inside the foundation." emoji="🏠" />
+          <StoryCard
+            src="https://images.unsplash.com/photo-1454875392665-2ac2c85e8d3e?fm=jpg&q=60&w=1200&auto=format&fit=crop"
+            alt="A resident's hands folded in gratitude"
+            caption="అన్నదాత! సుఖీభవ! — Blessings to every giver. A sponsored birthday at the home."
+          />
+          <StoryCard
+            src="https://images.unsplash.com/photo-1542622475-904e18612fa1?fm=jpg&q=60&w=1200&auto=format&fit=crop"
+            alt="Two residents sitting together in companionship"
+            caption="Our residents, together as a family."
+          />
+          <StoryCard
+            src="https://images.unsplash.com/photo-1584515933487-779824d29309?fm=jpg&q=60&w=1200&auto=format&fit=crop"
+            alt="An elder's hands wearing a gold wedding band"
+            caption="Everyday life and care inside the foundation."
+          />
         </div>
         <p className="stories__reel" data-reveal="">
           See more on our{" "}
