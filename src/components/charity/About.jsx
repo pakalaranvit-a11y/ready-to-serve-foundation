@@ -7,8 +7,8 @@ export default function About() {
         <div className="about__media" data-reveal="">
           <img
             className="media-card"
-            src="https://images.unsplash.com/photo-1543333995-a78aea2eee50?fm=jpg&q=60&w=1200&auto=format&fit=crop"
-            alt="A caregiver assisting an elderly resident at the Ready To Serve Foundation home"
+            src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/9ea11f2fb_image.png"
+            alt="Residents of the Ready To Serve Foundation old age home celebrating a birthday together"
           />
           <span className="media-card__tag">A resident shares his thanks</span>
         </div>

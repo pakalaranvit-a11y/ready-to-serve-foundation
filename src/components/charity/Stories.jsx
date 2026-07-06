@@ -27,8 +27,8 @@ export default function Stories() {
         </div>
         <div className="stories__grid">
           <StoryCard
-            src="https://images.unsplash.com/photo-1454875392665-2ac2c85e8d3e?fm=jpg&q=60&w=1200&auto=format&fit=crop"
-            alt="A resident's hands folded in gratitude"
+            src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/66b8544b3_image.png"
+            alt="An elderly man and woman clapping joyfully at a birthday celebration in the home"
             caption="అన్నదాత! సుఖీభవ! — Blessings to every giver. A sponsored birthday at the home."
           />
           <StoryCard

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import QRCode from "qrcode";
 import { CONFIG, fmt, upiLink } from "@/lib/charityConfig";
-import { CheckCircle } from "lucide-react";
 
 export default function Donate() {
   const [amount, setAmountState] = useState(CONFIG.defaultAmount);
@@ -24,38 +24,24 @@ export default function Donate() {
   // Render QR code
   useEffect(() => {
     if (!qrRef.current) return;
-    qrRef.current.innerHTML = "";
-    // Dynamic import of qrcode library — we'll use a canvas approach
     const link = upiLink(amount);
-    const size = 240;
     const canvas = document.createElement("canvas");
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext("2d");
-
-    // Simple QR placeholder with the UPI link text
-    // We'll generate a proper QR using the data URL approach
-    try {
-      import("https://cdn.jsdelivr.net/npm/qrcode@1.5.3/+esm").then((QRCode) => {
-        QRCode.toCanvas(canvas, link, {
-          width: size,
-          margin: 1,
-          color: { dark: "#0b3d2e", light: "#ffffff" },
-        }).then(() => {
-          if (qrRef.current) {
-            qrRef.current.innerHTML = "";
-            qrRef.current.appendChild(canvas);
-          }
-        }).catch(() => {});
-      }).catch(() => {
-        // Fallback: show text
+    QRCode.toCanvas(canvas, link, {
+      width: 240,
+      margin: 1,
+      color: { dark: "#0b3d2e", light: "#ffffff" },
+    })
+      .then(() => {
+        if (qrRef.current) {
+          qrRef.current.innerHTML = "";
+          qrRef.current.appendChild(canvas);
+        }
+      })
+      .catch(() => {
         if (qrRef.current) {
           qrRef.current.innerHTML = `<div style="padding:1rem;font-size:0.8rem;text-align:center;color:#55604f">Scan with any UPI app</div>`;
         }
       });
-    } catch {
-      // noop
-    }
   }, [amount]);
 
   const handleCopy = () => {
