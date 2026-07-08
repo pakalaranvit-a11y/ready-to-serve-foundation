@@ -1,11 +1,24 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import QRCode from "qrcode";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { CONFIG, fmt, upiLink } from "@/lib/charityConfig";
+
+const isMobile = typeof navigator !== "undefined" &&
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 export default function Donate() {
   const [amount, setAmountState] = useState(CONFIG.defaultAmount);
   const [copied, setCopied] = useState(false);
+  const [modalCopied, setModalCopied] = useState(false);
+  const [showPay, setShowPay] = useState(false);
   const qrRef = useRef(null);
+  const modalQrRef = useRef(null);
   const inputRef = useRef(null);
 
   const matchLabel = CONFIG.presets.find((p) => p.amount === amount)?.label || "";
@@ -15,16 +28,13 @@ export default function Donate() {
     if (!fromInput && inputRef.current) inputRef.current.value = val > 0 ? val : "";
   }, []);
 
-  // Expose globally so Impact cards can set it
   useEffect(() => {
     window.__setDonateAmount = setAmount;
     return () => { delete window.__setDonateAmount; };
   }, [setAmount]);
 
-  // Render QR code
-  useEffect(() => {
-    if (!qrRef.current) return;
-    const link = upiLink(amount);
+  const renderQr = useCallback((el, link) => {
+    if (!el) return;
     const canvas = document.createElement("canvas");
     QRCode.toCanvas(canvas, link, {
       width: 240,
@@ -32,24 +42,30 @@ export default function Donate() {
       color: { dark: "#0b3d2e", light: "#ffffff" },
     })
       .then(() => {
-        if (qrRef.current) {
-          qrRef.current.innerHTML = "";
-          qrRef.current.appendChild(canvas);
+        if (el) {
+          el.innerHTML = "";
+          el.appendChild(canvas);
         }
       })
       .catch(() => {
-        if (qrRef.current) {
-          qrRef.current.innerHTML = `<div style="padding:1rem;font-size:0.8rem;text-align:center;color:#55604f">Scan with any UPI app</div>`;
-        }
+        if (el) el.innerHTML = `<div style="padding:1rem;font-size:0.8rem;text-align:center;color:#55604f">Scan with any UPI app</div>`;
       });
-  }, [amount]);
+  }, []);
 
-  const handleCopy = () => {
+  useEffect(() => {
+    renderQr(qrRef.current, upiLink(amount));
+  }, [amount, renderQr]);
+
+  useEffect(() => {
+    if (showPay) renderQr(modalQrRef.current, upiLink(amount));
+  }, [showPay, amount, renderQr]);
+
+  const copyUpi = (setter) => {
     const val = CONFIG.upiId;
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(val).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1800);
+        setter(true);
+        setTimeout(() => setter(false), 1800);
       });
     } else {
       const t = document.createElement("textarea");
@@ -58,8 +74,18 @@ export default function Donate() {
       t.select();
       try { document.execCommand("copy"); } catch {}
       document.body.removeChild(t);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      setter(true);
+      setTimeout(() => setter(false), 1800);
+    }
+  };
+
+  const handlePay = (e) => {
+    if (!amount) { e.preventDefault(); return; }
+    if (isMobile) {
+      window.location.href = upiLink(amount);
+    } else {
+      e.preventDefault();
+      setShowPay(true);
     }
   };
 
@@ -133,20 +159,22 @@ export default function Donate() {
             {matchLabel ? `✨ ${matchLabel}` : amount > 0 ? "Thank you for your generosity ❤️" : ""}
           </p>
 
-          <a
-            href={upiLink(amount)}
+          <button
+            type="button"
+            onClick={handlePay}
             className={`btn btn--primary btn--lg btn--block ${!amount ? "is-disabled" : ""}`}
             style={{ marginTop: "0.2rem" }}
+            disabled={!amount}
           >
             Pay ₹{fmt(amount || 0)} with UPI app
-          </a>
-          <p className="hint">Opens Google&nbsp;Pay, PhonePe, Paytm or any UPI app on your phone.</p>
+          </button>
+          <p className="hint">{isMobile ? "Opens Google Pay, PhonePe, Paytm or any UPI app on your phone." : "Scan the QR with any UPI app on your phone to pay."}</p>
 
           <div className="qr-block">
             <div className="qr-block__code" ref={qrRef} aria-label="UPI QR code" />
             <div className="qr-block__copy">
               <p className="qr-block__lead">On a laptop? <strong>Scan to pay</strong> with any UPI app.</p>
-              <button className="copy-row" type="button" onClick={handleCopy}>
+              <button className="copy-row" type="button" onClick={() => copyUpi(setCopied)}>
                 <span className="copy-row__label">UPI ID</span>
                 <span className="copy-row__value">{CONFIG.upiId}</span>
                 <span className="copy-row__btn" aria-hidden="true">Copy</span>
@@ -184,6 +212,39 @@ export default function Donate() {
           <p className="card__foot">A receipt can be issued on request. Thank you for serving with us. 🙏</p>
         </div>
       </div>
+
+      <Dialog open={showPay} onOpenChange={setShowPay}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Pay ₹{fmt(amount || 0)} via UPI</DialogTitle>
+            <DialogDescription>
+              Open any UPI app on your phone (Google Pay, PhonePe, Paytm) and scan this code to complete your donation.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col items-center gap-4 py-2">
+            <div
+              ref={modalQrRef}
+              className="rounded-xl border p-2 bg-white"
+              style={{ width: 220, height: 220, display: "grid", placeItems: "center" }}
+              aria-label="UPI QR code"
+            />
+            <button
+              type="button"
+              onClick={() => copyUpi(setModalCopied)}
+              className="copy-row"
+              style={{ width: "100%" }}
+            >
+              <span className="copy-row__label">UPI ID</span>
+              <span className="copy-row__value">{CONFIG.upiId}</span>
+              <span className="copy-row__btn" aria-hidden="true">Copy</span>
+            </button>
+            {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
+            <p className="text-xs text-center text-[var(--ink-soft)]">
+              Or send directly to <strong>{CONFIG.upiId}</strong> from your banking app.
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
