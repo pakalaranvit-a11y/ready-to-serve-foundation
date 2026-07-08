@@ -37,7 +37,7 @@ export default function Hero() {
     <section className="hero">
       <div className="hero__bg" aria-hidden="true">
         <img
-          src="https://images.unsplash.com/photo-1559234938-b60fff04894d?fm=jpg&q=60&w=3000&auto=format&fit=crop"
+          src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/9ea11f2fb_image.png"
           alt=""
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
         />
