@@ -17,8 +17,7 @@ export default function Donate() {
   const [copied, setCopied] = useState(false);
   const [modalCopied, setModalCopied] = useState(false);
   const [showPay, setShowPay] = useState(false);
-  const qrRef = useRef(null);
-  const modalQrRef = useRef(null);
+  const [qrUrl, setQrUrl] = useState("");
   const inputRef = useRef(null);
 
   const matchLabel = CONFIG.presets.find((p) => p.amount === amount)?.label || "";
@@ -33,32 +32,18 @@ export default function Donate() {
     return () => { delete window.__setDonateAmount; };
   }, [setAmount]);
 
-  const renderQr = useCallback((el, link) => {
-    if (!el) return;
-    const canvas = document.createElement("canvas");
-    QRCode.toCanvas(canvas, link, {
-      width: 240,
-      margin: 1,
+  useEffect(() => {
+    let active = true;
+    QRCode.toDataURL(upiLink(amount), {
+      width: 320,
+      margin: 2,
+      errorCorrectionLevel: "M",
       color: { dark: "#0b3d2e", light: "#ffffff" },
     })
-      .then(() => {
-        if (el) {
-          el.innerHTML = "";
-          el.appendChild(canvas);
-        }
-      })
-      .catch(() => {
-        if (el) el.innerHTML = `<div style="padding:1rem;font-size:0.8rem;text-align:center;color:#55604f">Scan with any UPI app</div>`;
-      });
-  }, []);
-
-  useEffect(() => {
-    renderQr(qrRef.current, upiLink(amount));
-  }, [amount, renderQr]);
-
-  useEffect(() => {
-    if (showPay) renderQr(modalQrRef.current, upiLink(amount));
-  }, [showPay, amount, renderQr]);
+      .then((url) => { if (active) setQrUrl(url); })
+      .catch(() => { if (active) setQrUrl(""); });
+    return () => { active = false; };
+  }, [amount]);
 
   const copyUpi = (setter) => {
     const val = CONFIG.upiId;
@@ -171,7 +156,13 @@ export default function Donate() {
           <p className="hint">{isMobile ? "Opens Google Pay, PhonePe, Paytm or any UPI app on your phone." : "Scan the QR with any UPI app on your phone to pay."}</p>
 
           <div className="qr-block">
-            <div className="qr-block__code" ref={qrRef} aria-label="UPI QR code" />
+            <div className="qr-block__code" aria-label="UPI QR code">
+              {qrUrl ? (
+                <img src={qrUrl} alt="UPI QR code" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+              ) : (
+                <span style={{ fontSize: "0.76rem", color: "#55604f" }}>Generating…</span>
+              )}
+            </div>
             <div className="qr-block__copy">
               <p className="qr-block__lead">On a laptop? <strong>Scan to pay</strong> with any UPI app.</p>
               <button className="copy-row" type="button" onClick={() => copyUpi(setCopied)}>
@@ -223,11 +214,16 @@ export default function Donate() {
           </DialogHeader>
           <div className="flex flex-col items-center gap-4 py-2">
             <div
-              ref={modalQrRef}
               className="rounded-xl border p-2 bg-white"
               style={{ width: 220, height: 220, display: "grid", placeItems: "center" }}
               aria-label="UPI QR code"
-            />
+            >
+              {qrUrl ? (
+                <img src={qrUrl} alt="UPI QR code" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+              ) : (
+                <span style={{ fontSize: "0.8rem", color: "#55604f" }}>Generating…</span>
+              )}
+            </div>
             <button
               type="button"
               onClick={() => copyUpi(setModalCopied)}
