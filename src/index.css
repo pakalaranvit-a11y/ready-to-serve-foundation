@@ -182,8 +182,8 @@
 
 /* Hero */
 .hero { position:relative;min-height:100svh;display:flex;align-items:center;color:#fff;overflow:hidden;margin-top:-68px;padding-top:68px; }
-.hero__bg { position:absolute;inset:0;z-index:-1; }
-.hero__scrim { position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,38,28,.55) 0%,rgba(7,38,28,.45) 35%,rgba(7,38,28,.82) 100%),radial-gradient(120% 90% at 15% 20%,rgba(11,61,46,.25),transparent 60%),linear-gradient(135deg,var(--green-900),var(--green-700)); }
+.hero__bg { position:absolute;inset:0;z-index:-1;background:linear-gradient(135deg,var(--green-900),var(--green-700)); }
+.hero__scrim { position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,38,28,.72) 0%,rgba(7,38,28,.55) 35%,rgba(7,38,28,.88) 100%),radial-gradient(120% 90% at 15% 20%,rgba(11,61,46,.3),transparent 60%); }
 .hero__inner { padding-block:clamp(40px,10vh,90px);max-width:760px; }
 .hero__title { font-size:clamp(2.6rem,8vw,5.2rem);font-weight:600;text-shadow:0 4px 30px rgba(0,0,0,.35); }
 .hero__lede { font-size:clamp(1.05rem,2.4vw,1.32rem);max-width:600px;margin:1.4rem 0 2rem;color:rgba(255,255,255,.92); }
