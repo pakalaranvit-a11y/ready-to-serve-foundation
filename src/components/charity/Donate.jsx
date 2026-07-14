@@ -35,10 +35,10 @@ export default function Donate() {
   useEffect(() => {
     let active = true;
     QRCode.toDataURL(upiLink(amount), {
-      width: 320,
-      margin: 2,
-      errorCorrectionLevel: "M",
-      color: { dark: "#0b3d2e", light: "#ffffff" },
+      width: 400,
+      margin: 4,
+      errorCorrectionLevel: "Q",
+      color: { dark: "#000000", light: "#ffffff" },
     })
       .then((url) => { if (active) setQrUrl(url); })
       .catch(() => { if (active) setQrUrl(""); });

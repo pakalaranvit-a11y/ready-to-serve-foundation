@@ -28,8 +28,12 @@ export function upiLink(amount) {
   const p = new URLSearchParams();
   p.set("pa", CONFIG.upiId);
   p.set("pn", CONFIG.upiPayeeName || CONFIG.orgName);
-  p.set("cu", "INR");
-  if (amount && amount > 0) p.set("am", String(amount));
   p.set("tn", "Donation to " + CONFIG.orgName);
-  return "upi://pay?" + p.toString();
+  if (amount && amount > 0) {
+    const a = Number(amount);
+    if (!isNaN(a) && a > 0) p.set("am", a.toFixed(2).replace(/\.00$/, ""));
+  }
+  p.set("cu", "INR");
+  // UPI apps decode %20 reliably; some misinterpret the '+' produced by URLSearchParams
+  return "upi://pay?" + p.toString().replace(/\+/g, "%20");
 }
