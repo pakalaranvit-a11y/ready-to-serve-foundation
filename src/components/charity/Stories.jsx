@@ -32,13 +32,13 @@ export default function Stories() {
             caption="అన్నదాత! సుఖీభవ! — Blessings to every giver. A sponsored birthday at the home."
           />
           <StoryCard
-            src="https://images.unsplash.com/photo-1542622475-904e18612fa1?fm=jpg&q=60&w=1200&auto=format&fit=crop"
-            alt="Two residents sitting together in companionship"
+            src="https://images.unsplash.com/photo-1780314501266-0158179ba545?fm=jpg&q=60&w=1200&auto=format&fit=crop"
+            alt="An elderly Indian man and a young boy sitting together and smiling in Vadodara, India"
             caption="Our residents, together as a family."
           />
           <StoryCard
-            src="https://images.unsplash.com/photo-1584515933487-779824d29309?fm=jpg&q=60&w=1200&auto=format&fit=crop"
-            alt="An elder's hands wearing a gold wedding band"
+            src="https://images.unsplash.com/photo-1780504862873-5f4ff5c322e9?fm=jpg&q=60&w=1200&auto=format&fit=crop"
+            alt="An elderly Indian man with a beard and tilak, sitting peacefully"
             caption="Everyday life and care inside the foundation."
           />
         </div>
