@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import QRCode from "qrcode";
+import confetti from "canvas-confetti";
+import { base44 } from "@/api/base44Client";
 import {
   Dialog,
   DialogContent,
@@ -14,9 +16,15 @@ const isMobile = typeof navigator !== "undefined" &&
 
 export default function Donate() {
   const [amount, setAmountState] = useState(CONFIG.defaultAmount);
+  const [frequency, setFrequency] = useState("one_time");
+  const [donorName, setDonorName] = useState("");
+  const [message, setMessage] = useState("");
+  const [anonymous, setAnonymous] = useState(false);
   const [copied, setCopied] = useState(false);
   const [modalCopied, setModalCopied] = useState(false);
   const [showPay, setShowPay] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [thankYou, setThankYou] = useState(null);
   const [qrUrl, setQrUrl] = useState("");
   const inputRef = useRef(null);
 
@@ -49,30 +57,62 @@ export default function Donate() {
     const val = CONFIG.upiId;
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(val).then(() => {
-        setter(true);
-        setTimeout(() => setter(false), 1800);
+        setter(true); setTimeout(() => setter(false), 1800);
       });
     } else {
       const t = document.createElement("textarea");
-      t.value = val;
-      document.body.appendChild(t);
-      t.select();
+      t.value = val; document.body.appendChild(t); t.select();
       try { document.execCommand("copy"); } catch {}
       document.body.removeChild(t);
-      setter(true);
-      setTimeout(() => setter(false), 1800);
+      setter(true); setTimeout(() => setter(false), 1800);
     }
   };
 
-  const handlePay = (e) => {
+  const recordDonation = async (displayName) => {
+    try {
+      await base44.entities.Donation.create({
+        donor_name: displayName,
+        amount,
+        frequency,
+        message: message.trim(),
+        anonymous,
+      });
+    } catch {}
+  };
+
+  const fireThanks = () => {
+    confetti({
+      particleCount: 90, spread: 75, startVelocity: 38, origin: { y: 0.7 },
+      colors: ["#1b9e5f", "#e0a93b", "#f1c45a"],
+    });
+  };
+
+  const handlePay = async (e) => {
     if (!amount) { e.preventDefault(); return; }
+    const displayName = anonymous ? "" : (donorName.trim() || "Well-wisher");
+    setSubmitting(true);
+    await recordDonation(displayName);
+    setSubmitting(false);
+    const thanksMsg = CONFIG.thankYouMessages[Math.floor(Math.random() * CONFIG.thankYouMessages.length)];
+    setThankYou({ name: displayName, amount, frequency, message: thanksMsg });
+    fireThanks();
     if (isMobile) {
       window.location.href = upiLink(amount);
     } else {
-      e.preventDefault();
       setShowPay(true);
     }
   };
+
+  const resetThankYou = () => {
+    setThankYou(null);
+    setDonorName("");
+    setMessage("");
+    setAnonymous(false);
+  };
+
+  const payLabel = frequency === "monthly"
+    ? `Start ₹${fmt(amount || 0)}/month with UPI`
+    : `Pay ₹${fmt(amount || 0)} with UPI app`;
 
   return (
     <section className="section donate" id="donate">
@@ -94,7 +134,7 @@ export default function Donate() {
             </li>
             <li>
               <svg viewBox="0 0 24 24" className="i"><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" /></svg>
-              Works on any phone or laptop
+              Choose one-time or monthly giving
             </li>
           </ul>
           <p className="donate__call">
@@ -105,6 +145,23 @@ export default function Donate() {
 
         <div className="card donate__card" data-reveal="">
           <h3 className="card__title">Choose your gift</h3>
+
+          {thankYou && (
+            <div className="thanks" role="status">
+              <div className="thanks__icon" aria-hidden="true">❤️</div>
+              <h4>Thank you{thankYou.name && thankYou.name !== "Well-wisher" ? `, ${thankYou.name}` : "!"}</h4>
+              <p>{thankYou.message}</p>
+              <p className="thanks__amt">
+                Your {thankYou.frequency === "monthly" ? "monthly gift of" : "gift of"} ₹{fmt(thankYou.amount)} has been added to our wall of giving.
+              </p>
+              <button type="button" className="btn btn--ghost btn--sm" onClick={resetThankYou}>Make another gift</button>
+            </div>
+          )}
+
+          <div className="freq-toggle" role="group" aria-label="Donation frequency">
+            <button type="button" className={frequency === "one_time" ? "is-active" : ""} onClick={() => setFrequency("one_time")}>One-time</button>
+            <button type="button" className={frequency === "monthly" ? "is-active" : ""} onClick={() => setFrequency("monthly")}>Monthly</button>
+          </div>
 
           <div className="amount-grid" role="group" aria-label="Choose an amount">
             {CONFIG.presets.map((p) => (
@@ -121,7 +178,7 @@ export default function Donate() {
           </div>
 
           <label className="custom-amount" htmlFor="customAmount">
-            <span>Or enter your own amount</span>
+            <span>Or enter your own amount {frequency === "monthly" && "(per month)"}</span>
             <div className="custom-amount__field">
               <span className="rupee">₹</span>
               <input
@@ -144,14 +201,40 @@ export default function Donate() {
             {matchLabel ? `✨ ${matchLabel}` : amount > 0 ? "Thank you for your generosity ❤️" : ""}
           </p>
 
+          <label className="field" htmlFor="donorName">Your name (shown on the wall)</label>
+          <input
+            id="donorName"
+            className="field__input"
+            type="text"
+            placeholder="e.g. Ramesh K."
+            value={donorName}
+            onChange={(e) => setDonorName(e.target.value)}
+            disabled={anonymous}
+          />
+
+          <label className="field" htmlFor="donorMsg">A message for the elders (optional)</label>
+          <textarea
+            id="donorMsg"
+            className="field__input"
+            rows={2}
+            placeholder="Send your love…"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+
+          <label className="checkrow">
+            <input type="checkbox" checked={anonymous} onChange={(e) => setAnonymous(e.target.checked)} />
+            <span>Give anonymously</span>
+          </label>
+
           <button
             type="button"
             onClick={handlePay}
-            className={`btn btn--primary btn--lg btn--block ${!amount ? "is-disabled" : ""}`}
-            style={{ marginTop: "0.2rem" }}
-            disabled={!amount}
+            className="btn btn--primary btn--lg btn--block"
+            style={{ marginTop: "0.4rem" }}
+            disabled={!amount || submitting}
           >
-            Pay ₹{fmt(amount || 0)} with UPI app
+            {submitting ? "Preparing…" : payLabel}
           </button>
           <p className="hint">{isMobile ? "Opens Google Pay, PhonePe, Paytm or any UPI app on your phone." : "Scan the QR with any UPI app on your phone to pay."}</p>
 
@@ -235,7 +318,7 @@ export default function Donate() {
               <span className="copy-row__btn" aria-hidden="true">Copy</span>
             </button>
             {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
-            <p className="text-xs text-center text-[var(--ink-soft)]">
+            <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
               Or send directly to <strong>{CONFIG.upiId}</strong> from your banking app.
             </p>
           </div>

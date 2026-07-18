@@ -1,4 +1,5 @@
 import React from "react";
+import { CONFIG } from "@/lib/charityConfig";
 
 export default function About() {
   return (
@@ -14,12 +15,12 @@ export default function About() {
         </div>
         <div className="about__copy" data-reveal="">
           <span className="kicker">Who we are</span>
-          <h2>A real home, run on kindness.</h2>
+          <h2>A real home, run on kindness since {CONFIG.sinceYear}.</h2>
           <p>
             The Ready&nbsp;To&nbsp;Serve Foundation runs a <strong>free old age home</strong> in Vanasthalipuram, Hyderabad for elders who have been left with no family, no income and nowhere to go.
           </p>
           <p>
-            Every rupee you give buys real things our residents need today — hot meals, medicines, clothes, a clean bed, and the joy of being remembered on their birthday.
+            We started in {CONFIG.startYear} with just <strong>{CONFIG.startMembers} members</strong> — and today, in {CONFIG.currentYear}, we care for <strong>{CONFIG.currentMembers} full-time residents</strong>. Every elder here gets a bed, a name, and a family that won't forget them.
           </p>
           <ul className="ticks" role="list">
             <li>Three nutritious meals, every single day</li>

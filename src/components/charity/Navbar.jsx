@@ -26,8 +26,8 @@ export default function Navbar() {
         <nav className="nav__links" aria-label="Primary">
           <a href="#about">Our Home</a>
           <a href="#impact">Your Impact</a>
-          <a href="#stories">Stories</a>
-          <a href="#contact">Contact</a>
+          <a href="#donors">Donors</a>
+          <a href="#elders">Our Elders</a>
         </nav>
         <a href="#donate" className="btn btn--primary btn--sm nav__cta">Donate&nbsp;Now</a>
       </div>

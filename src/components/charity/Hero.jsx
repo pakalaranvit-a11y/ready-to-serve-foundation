@@ -59,11 +59,11 @@ export default function Hero() {
         </div>
         <ul className="hero__stats" role="list">
           <li>
-            <AnimatedCounter target={40} />
-            <span>Elders cared for</span>
+            <AnimatedCounter target={100} />
+            <span>Elders in our care</span>
           </li>
           <li>
-            <AnimatedCounter target={1095} />
+            <AnimatedCounter target={9000} />
             <span>Meals served / month</span>
           </li>
           <li>
