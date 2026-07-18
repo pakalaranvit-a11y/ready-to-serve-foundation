@@ -5,6 +5,9 @@ import About from "@/components/charity/About";
 import Impact from "@/components/charity/Impact";
 import Donate from "@/components/charity/Donate";
 import Stories from "@/components/charity/Stories";
+import Journey from "@/components/charity/Journey";
+import DonorWall from "@/components/charity/DonorWall";
+import Location from "@/components/charity/Location";
 import FinalCTA from "@/components/charity/FinalCTA";
 import Footer from "@/components/charity/Footer";
 import StickyDonate from "@/components/charity/StickyDonate";
@@ -37,9 +40,12 @@ export default function Home() {
       <main id="top">
         <Hero />
         <About />
+        <Journey />
         <Impact />
         <Donate />
+        <DonorWall />
         <Stories />
+        <Location />
         <FinalCTA />
       </main>
       <Footer />

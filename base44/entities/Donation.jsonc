@@ -1,0 +1,46 @@
+{
+  "name": "Donation",
+  "type": "object",
+  "properties": {
+    "donor_name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": [
+        "one_time",
+        "monthly"
+      ],
+      "default": "one_time"
+    },
+    "message": {
+      "type": "string",
+      "default": ""
+    },
+    "is_anonymous": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "donor_name",
+    "amount"
+  ],
+  "rls": {
+    "create": true,
+    "read": true,
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

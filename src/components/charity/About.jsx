@@ -16,7 +16,7 @@ export default function About() {
           <span className="kicker">Who we are</span>
           <h2>A real home, run on kindness.</h2>
           <p>
-            The Ready&nbsp;To&nbsp;Serve Foundation runs a <strong>free old age home</strong> in Vanasthalipuram, Hyderabad for elders who have been left with no family, no income and nowhere to go.
+            The Ready&nbsp;To&nbsp;Serve Foundation runs a <strong>free old age home</strong> in Vanasthalipuram, Hyderabad for elders who have been left with no family, no income and nowhere to go. Since 2011 we've grown from 5 residents to a full-time family of 100 — but our promise has never changed.
           </p>
           <p>
             Every rupee you give buys real things our residents need today — hot meals, medicines, clothes, a clean bed, and the joy of being remembered on their birthday.
