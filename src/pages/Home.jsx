@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
 import Navbar from "@/components/charity/Navbar";
-import AppTabs from "@/components/charity/AppTabs";
 import Hero from "@/components/charity/Hero";
 import About from "@/components/charity/About";
 import Impact from "@/components/charity/Impact";
 import Donate from "@/components/charity/Donate";
-import Donors from "@/components/charity/Donors";
-import MapEmbed from "@/components/charity/MapEmbed";
 import Stories from "@/components/charity/Stories";
-import Elders from "@/components/charity/Elders";
 import FinalCTA from "@/components/charity/FinalCTA";
 import Footer from "@/components/charity/Footer";
+import StickyDonate from "@/components/charity/StickyDonate";
 
 export default function Home() {
   useEffect(() => {
@@ -42,14 +39,11 @@ export default function Home() {
         <About />
         <Impact />
         <Donate />
-        <Donors />
         <Stories />
-        <Elders />
-        <MapEmbed />
         <FinalCTA />
       </main>
       <Footer />
-      <AppTabs />
+      <StickyDonate />
     </div>
   );
 }
