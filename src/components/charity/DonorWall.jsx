@@ -19,9 +19,13 @@ export default function DonorWall() {
 
   useEffect(() => {
     load();
+    const unsub = base44.entities.Donation.subscribe(() => load());
     const handler = () => load();
     window.addEventListener("donation-added", handler);
-    return () => window.removeEventListener("donation-added", handler);
+    return () => {
+      if (typeof unsub === "function") unsub();
+      window.removeEventListener("donation-added", handler);
+    };
   }, []);
 
   const total = donations.reduce((s, d) => s + (Number(d.amount) || 0), 0);

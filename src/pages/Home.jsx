@@ -5,6 +5,7 @@ import About from "@/components/charity/About";
 import Impact from "@/components/charity/Impact";
 import Donate from "@/components/charity/Donate";
 import Stories from "@/components/charity/Stories";
+import Videos from "@/components/charity/Videos";
 import Journey from "@/components/charity/Journey";
 import DonorWall from "@/components/charity/DonorWall";
 import Location from "@/components/charity/Location";
@@ -45,6 +46,7 @@ export default function Home() {
         <Donate />
         <DonorWall />
         <Stories />
+        <Videos />
         <Location />
         <FinalCTA />
       </main>

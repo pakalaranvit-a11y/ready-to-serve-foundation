@@ -17,12 +17,16 @@ export const CONFIG = {
   mapsEmbed: "https://www.google.com/maps?q=Vanasthalipuram%2CHyderabad%2CTelangana&output=embed",
   mapsLink: "https://www.google.com/maps/search/?api=1&query=Vanasthalipuram%2CHyderabad%2CTelangana",
   presets: [
-    { amount: 160, label: "A day of meals for an elder" },
-    { amount: 2000, label: "Medicine for one elder for a month" },
-    { amount: 3500, label: "Food, groceries & medicine for a month" },
+    { amount: 101, label: "A day's meals for an elder" },
+    { amount: 501, label: "A few days of nourishment" },
+    { amount: 1001, label: "A week of meals & care" },
+    { amount: 2000, label: "Medicine for one elder / month" },
+    { amount: 3500, label: "Food, groceries & medicine / month" },
     { amount: 5000, label: "Sponsor a birthday celebration" },
+    { amount: 10001, label: "Sponsor an elder for a month" },
+    { amount: 50001, label: "Sponsor an elder for half a year" },
   ],
-  defaultAmount: 160,
+  defaultAmount: 2000,
   instagramReel: "https://www.instagram.com/reel/DX4B9sgsQLS/",
 };
 
