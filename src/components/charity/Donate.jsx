@@ -279,7 +279,7 @@ export default function Donate() {
             </details>
           )}
 
-          <p className="card__foot">A receipt can be issued on request. Thank you for serving with us. 🙏</p>
+          <p className="card__foot">{CONFIG.taxExemption}<br />A receipt can be issued on request. Thank you for serving with us. 🙏</p>
         </div>
       </div>
 

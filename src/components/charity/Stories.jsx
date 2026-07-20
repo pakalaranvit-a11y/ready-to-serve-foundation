@@ -32,13 +32,13 @@ export default function Stories() {
             caption="అన్నదాత! సుఖీభవ! — Blessings to every giver. A sponsored birthday at the home."
           />
           <StoryCard
-            src="https://images.unsplash.com/photo-1780314501266-0158179ba545?fm=jpg&q=60&w=1200&auto=format&fit=crop"
-            alt="An elderly Indian man and a young boy sitting together and smiling in Vadodara, India"
+            src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/fbd7abbf8_PHOTO-2026-07-18-13-10-22.jpg"
+            alt="Elderly residents and caretakers of the Ready To Serve Foundation standing together, a visitor being honoured with a pink shawl"
             caption="Our residents, together as a family."
           />
           <StoryCard
-            src="https://images.unsplash.com/photo-1780504862873-5f4ff5c322e9?fm=jpg&q=60&w=1200&auto=format&fit=crop"
-            alt="An elderly Indian man with a beard and tilak, sitting peacefully"
+            src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/f54da18fa_PHOTO-2026-07-18-13-10-23.jpg"
+            alt="Residents eating meals from metal trays in the dormitory of the Ready To Serve Foundation old age home"
             caption="Everyday life and care inside the foundation."
           />
         </div>

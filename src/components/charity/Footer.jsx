@@ -26,6 +26,7 @@ export default function Footer() {
           {CONFIG.email && (
             <p><a href={`mailto:${CONFIG.email}`}>{CONFIG.email}</a></p>
           )}
+          <p><a href={CONFIG.instagramReel} target="_blank" rel="noopener" className="link-strong">Instagram →</a></p>
         </div>
         <div className="footer__col">
           <h4>Give</h4>

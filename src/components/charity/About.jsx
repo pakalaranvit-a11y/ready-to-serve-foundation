@@ -7,10 +7,10 @@ export default function About() {
         <div className="about__media" data-reveal="">
           <img
             className="media-card"
-            src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/9ea11f2fb_image.png"
-            alt="Residents of the Ready To Serve Foundation old age home celebrating a birthday together"
+            src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/3b289d61d_PHOTO-2026-07-18-13-10-21.jpg"
+            alt="Residents and staff of the Ready To Serve Foundation standing together inside the home"
           />
-          <span className="media-card__tag">A resident shares his thanks</span>
+          <span className="media-card__tag">Inside our home, Vanasthalipuram</span>
         </div>
         <div className="about__copy" data-reveal="">
           <span className="kicker">Who we are</span>
