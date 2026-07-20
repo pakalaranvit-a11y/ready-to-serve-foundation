@@ -151,6 +151,15 @@ export default function Donate() {
             Prefer to talk first? Call or WhatsApp{" "}
             <a href={`tel:${CONFIG.phone}`} className="link-strong">{CONFIG.phone}</a>
           </p>
+
+          <div className="campaign">
+            <span className="kicker kicker--light">Our big mission</span>
+            <h3>{CONFIG.campaign.title}</h3>
+            <p>{CONFIG.campaign.body}</p>
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setAmount(CONFIG.campaign.sqFtPrice)}>
+              {CONFIG.campaign.cta} — ₹{fmt(CONFIG.campaign.sqFtPrice)} →
+            </button>
+          </div>
         </div>
 
         <div className="card donate__card" data-reveal="">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Heart } from "lucide-react";
+import { LogoMark } from "@/components/charity/Logo";
 import { CONFIG } from "@/lib/charityConfig";
 
 export default function Footer() {
@@ -7,14 +7,15 @@ export default function Footer() {
     <footer className="footer" id="contact">
       <div className="wrap footer__grid">
         <div>
-          <div className="brand brand--footer">
+          <a className="brand brand--footer" href="#top">
             <span className="brand__mark" aria-hidden="true">
-              <Heart size={22} />
+              <LogoMark size={26} />
             </span>
             <span className="brand__text">
               Ready To Serve<small>Foundation</small>
             </span>
-          </div>
+          </a>
+          <p className="footer__tag">“{CONFIG.motto}”</p>
           <p className="footer__blurb">{CONFIG.tagline}</p>
         </div>
         <div className="footer__col">
@@ -31,7 +32,9 @@ export default function Footer() {
         <div className="footer__col">
           <h4>Give</h4>
           <p><a href="#donate" className="link-strong">Donate by UPI →</a></p>
-          {CONFIG.regNo && <p>Reg: {CONFIG.regNo}</p>}
+          {CONFIG.website && <p><a href={`https://${CONFIG.website}`} target="_blank" rel="noopener" className="link-strong">{CONFIG.website} ↗</a></p>}
+          {CONFIG.societyRegNo && <p>Reg. No. {CONFIG.societyRegNo}</p>}
+          {CONFIG.regNo && <p>{CONFIG.regNo}</p>}
           <p className="footer__note">100% of your gift reaches the home.</p>
         </div>
       </div>
