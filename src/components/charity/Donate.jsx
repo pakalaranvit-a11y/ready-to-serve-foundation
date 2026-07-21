@@ -269,8 +269,8 @@ export default function Donate() {
           )}
 
           {CONFIG.bank.accountNumber && CONFIG.bank.ifsc && (
-            <details className="bank">
-              <summary>Bank transfer (NEFT / IMPS)</summary>
+            <div className="bank">
+              <p className="bank__title">Bank transfer (NEFT / IMPS) — {CONFIG.bank.bankName}</p>
               <dl className="bank__list">
                 {[
                   ["Account name", CONFIG.bank.accountName],
@@ -285,7 +285,7 @@ export default function Donate() {
                   </React.Fragment>
                 ))}
               </dl>
-            </details>
+            </div>
           )}
 
           <p className="card__foot">{CONFIG.taxExemption}<br />A receipt can be issued on request. Thank you for serving with us. 🙏</p>

@@ -55,9 +55,10 @@ export default function DonorWall() {
         {loading ? (
           <p style={{ color: "var(--ink-soft)" }}>Loading donors…</p>
         ) : donations.length === 0 ? (
-          <p style={{ color: "var(--ink-soft)" }}>
-            Be the first name on our donor wall — donate above and add your name to be recognised. 🙏
-          </p>
+          <div className="donorwall-empty" data-reveal="">
+            <p>Be the first name on our donor wall — donate above and add your name to be recognised. 🙏</p>
+            <a href="#donate" className="btn btn--primary btn--sm">Donate now</a>
+          </div>
         ) : (
           <div className="stories__grid">
             {donations.map((d) => (
