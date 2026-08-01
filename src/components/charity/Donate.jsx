@@ -11,9 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { CONFIG, fmt, upiLink } from "@/lib/charityConfig";
 
-const isMobile = typeof navigator !== "undefined" &&
-  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
 const noteFor = (frequency) =>
   frequency === "monthly" ? `Monthly donation to ${CONFIG.orgName}` : `Donation to ${CONFIG.orgName}`;
 
@@ -82,12 +79,8 @@ export default function Donate() {
 
   const handlePay = (e) => {
     if (!amount) { e.preventDefault(); return; }
-    if (isMobile) {
-      window.location.href = upiLink(amount, noteFor(frequency));
-    } else {
-      e.preventDefault();
-      setShowPay(true);
-    }
+    e.preventDefault();
+    setShowPay(true);
   };
 
   const submitRecognition = async (e) => {
@@ -235,7 +228,7 @@ export default function Donate() {
           >
             {frequency === "monthly" ? "Set up " : "Pay "}₹{fmt(amount || 0)}{frequency === "monthly" ? " / month" : ""} via UPI
           </button>
-          <p className="hint">{isMobile ? "Opens Google Pay, PhonePe, Paytm or any UPI app on your phone." : "Scan the QR with any UPI app on your phone to pay."}</p>
+          <p className="hint">Tap pay to show a QR you can scan with any UPI app, or open the UPI app directly.</p>
           {frequency === "monthly" && (
             <p className="hint" style={{ color: "var(--green-600)", fontWeight: 600 }}>
               Monthly giving: approve a recurring UPI mandate in your app so your support reaches our elders every month. 🙏
@@ -339,6 +332,17 @@ export default function Donate() {
               <span className="copy-row__btn" aria-hidden="true">Copy</span>
             </button>
             {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
+            <a
+              className="btn btn--primary btn--block"
+              href={upiLink(amount, noteFor(frequency))}
+            >
+              Open in UPI app <span aria-hidden="true">→</span>
+            </a>
+            {CONFIG.cardDonateUrl && (
+              <a className="btn btn--ghost btn--block" href={CONFIG.cardDonateUrl} target="_blank" rel="noopener">
+                Donate by debit / credit card
+              </a>
+            )}
             <p className="text-xs text-center text-[var(--ink-soft)]">
               Or send directly to <strong>{CONFIG.upiId}</strong> from your banking app.
             </p>
