@@ -250,7 +250,8 @@
 .amount-btn.is-active { border-color:var(--green-600);background:rgba(27,158,95,.08);box-shadow:0 0 0 3px rgba(27,158,95,.16); }
 .amount-btn__amt { font-family:var(--font-head);font-weight:700;font-size:1.2rem;color:var(--green-700); }
 .amount-btn__lbl { font-size:.76rem;color:var(--ink-soft);line-height:1.25; }
-.amount-select { display:none;width:100%;font-family:inherit;font-size:1.05rem;font-weight:600;color:var(--green-700);background:var(--cream);border:1.5px solid var(--line);border-radius:14px;padding:.85em 1em;outline:0;-webkit-appearance:none;appearance:none;cursor:pointer;margin-bottom:1rem; }
+.amount-select { display:none;width:100%;font-family:inherit;font-size:1.05rem;font-weight:600;color:var(--green-700);background:var(--cream) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%230f5132' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 1em center;border:1.5px solid var(--line);border-radius:14px;padding:.85em 2.4em .85em 1em;outline:0;-webkit-appearance:none;-moz-appearance:none;appearance:none;cursor:pointer;margin-bottom:1rem; }
+.amount-select::-moz-focusring { outline:0; }
 .amount-select:focus { border-color:var(--green-500);box-shadow:0 0 0 3px rgba(27,158,95,.14); }
 
 .custom-amount { display:block;margin:.4rem 0 .3rem; }
