@@ -311,9 +311,7 @@
 .footer__note { font-size:.85rem;opacity:.8; }
 .footer__base { display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid rgba(255,255,255,.12);font-size:.85rem;opacity:.8; }
 
-/* Sticky mobile donate */
-.sticky-donate { position:fixed;left:50%;bottom:16px;transform:translateX(-50%) translateY(140%);z-index:70;background:linear-gradient(135deg,var(--green-600),var(--green-500));color:#fff;font-weight:800;padding:.95em 1.8em;border-radius:100px;box-shadow:var(--shadow-lg);display:none;transition:transform .35s var(--ease);white-space:nowrap; }
-.sticky-donate.is-visible { transform:translateX(-50%) translateY(0); }
+
 
 /* Recognition + frequency + journey */
 .seg { display:flex; gap:.4rem; background:var(--cream); border:1.5px solid var(--line); border-radius:14px; padding:4px; margin-bottom:1rem; }
@@ -353,7 +351,6 @@
 @media (max-width:680px) {
   .nav__links { display:none; }
   .stories__grid { grid-template-columns:1fr;max-width:380px;margin-inline:auto; }
-  .sticky-donate { display:block; }
   .qr-block { flex-direction:column;text-align:center; }
   .footer__grid { grid-template-columns:1fr; }
   .hero__stats { gap:1.2rem 2rem; }
