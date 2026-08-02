@@ -11,7 +11,7 @@ import DonorWall from "@/components/charity/DonorWall";
 import Location from "@/components/charity/Location";
 import FinalCTA from "@/components/charity/FinalCTA";
 import Footer from "@/components/charity/Footer";
-import StickyDonate from "@/components/charity/StickyDonate";
+
 
 export default function Home() {
   useEffect(() => {
@@ -51,7 +51,6 @@ export default function Home() {
         <FinalCTA />
       </main>
       <Footer />
-      <StickyDonate />
     </div>
   );
 }
