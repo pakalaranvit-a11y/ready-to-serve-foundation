@@ -42,7 +42,7 @@ export default function Footer() {
       <div className="wrap footer__base">
         <span>© {new Date().getFullYear()} Ready To Serve Foundation. Made with care.</span>
         <span>
-          <Link to="/privacy-policy" style={{ marginRight: "1rem" }}>Privacy Policy</Link>
+          <Link to="/privacy" style={{ marginRight: "1rem" }}>Privacy Policy</Link>
           <Link to="/support">Support</Link>
         </span>
         <a href="#top">Back to top ↑</a>
