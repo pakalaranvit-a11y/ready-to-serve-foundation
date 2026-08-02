@@ -1,6 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import { Share2 } from "lucide-react";
+import { CONFIG } from "@/lib/charityConfig";
 
 export default function FinalCTA() {
+  const [shared, setShared] = useState(false);
+
+  const handleShare = async () => {
+    const data = {
+      title: `${CONFIG.orgName} — ${CONFIG.motto}`,
+      text: `${CONFIG.tagline} Support our free old age home in Hyderabad.`,
+      url: window.location.origin,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(data);
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(`${data.text} ${data.url}`);
+        setShared(true);
+        setTimeout(() => setShared(false), 2000);
+      }
+    } catch {
+      /* user cancelled — no action needed */
+    }
+  };
+
   return (
     <section className="section finalcta">
       <div className="wrap finalcta__inner" data-reveal="">
@@ -9,6 +32,17 @@ export default function FinalCTA() {
         <a href="#donate" className="btn btn--primary btn--lg">
           Donate now <span aria-hidden="true">→</span>
         </a>
+        <div style={{ marginTop: "1.4rem", display: "flex", justifyContent: "center", gap: ".8rem", flexWrap: "wrap", alignItems: "center" }}>
+          <button
+            type="button"
+            onClick={handleShare}
+            className="btn btn--ghost btn--sm"
+            style={{ "--fg": "var(--green-900)", borderColor: "rgba(11,61,46,.35)" }}
+          >
+            <Share2 size={18} /> Share this cause
+          </button>
+          {shared && <span style={{ fontSize: ".85rem", fontWeight: 700, color: "var(--green-900)" }}>Copied link ✓</span>}
+        </div>
       </div>
     </section>
   );
