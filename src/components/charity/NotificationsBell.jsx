@@ -76,7 +76,12 @@ export default function NotificationsBell() {
         type="button"
         className="notif-bell"
         aria-label={`Notifications${unreadCount ? `, ${unreadCount} unread` : ""}`}
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => {
+          setOpen((o) => {
+            if (!o) markAllRead();
+            return !o;
+          });
+        }}
       >
         <Bell size={20} />
         {unreadCount > 0 && (
