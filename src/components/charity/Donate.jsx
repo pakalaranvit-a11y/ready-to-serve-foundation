@@ -105,6 +105,11 @@ export default function Donate() {
         description: `₹${fmt(amount)} ${frequency === "monthly" ? "monthly " : ""}recorded on our donor wall.`,
       });
       setDonorName(""); setDonorMsg(""); setAnonymous(false);
+      base44.entities.Notification.create({
+        title: "A new donor joined our family 🙏",
+        body: `Someone just contributed ₹${fmt(amount)} to our elders — thank you for spreading the word.`,
+        type: "donation",
+      }).catch(() => {});
       window.dispatchEvent(new Event("donation-added"));
     } catch (err) {
       toast({

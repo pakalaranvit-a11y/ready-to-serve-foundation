@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Logo from "@/components/charity/Logo";
+import NotificationsBell from "@/components/charity/NotificationsBell";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -15,6 +16,7 @@ export default function Navbar() {
     <header className={`nav ${scrolled ? "is-scrolled" : ""}`} id="nav">
       <div className="wrap nav__inner">
         <Logo />
+        <NotificationsBell />
         <nav className="nav__links" aria-label="Primary">
           <a href="#about">Our Home</a>
           <a href="#impact">Your Impact</a>
