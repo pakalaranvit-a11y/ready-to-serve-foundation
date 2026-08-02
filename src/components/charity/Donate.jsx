@@ -163,25 +163,6 @@ export default function Donate() {
             <button type="button" className={frequency === "monthly" ? "is-active" : ""} onClick={() => changeFrequency("monthly")}>Monthly</button>
           </div>
 
-          <select
-            className="amount-select"
-            aria-label="Choose an amount"
-            value={CONFIG.presets.some((p) => p.amount === amount) ? amount : "custom"}
-            onChange={(e) => {
-              const v = e.target.value;
-              if (v === "custom") {
-                if (inputRef.current) inputRef.current.focus();
-              } else {
-                setAmount(Number(v));
-              }
-            }}
-          >
-            {CONFIG.presets.map((p) => (
-              <option key={p.amount} value={p.amount}>₹{fmt(p.amount)} — {p.label}</option>
-            ))}
-            <option value="custom">Enter your own amount</option>
-          </select>
-
           <div className="amount-grid" role="group" aria-label="Choose an amount">
             {CONFIG.presets.map((p) => (
               <button

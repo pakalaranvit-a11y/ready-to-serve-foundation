@@ -357,8 +357,6 @@
   .qr-block { flex-direction:column;text-align:center; }
   .footer__grid { grid-template-columns:1fr; }
   .hero__stats { gap:1.2rem 2rem; }
-  .amount-grid { display:none; }
-  .amount-select { display:block; }
 }
 @media (max-width:420px) {
   .amount-grid { grid-template-columns:1fr; }
