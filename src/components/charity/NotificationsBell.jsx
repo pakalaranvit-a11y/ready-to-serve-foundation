@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Bell } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-const LS_KEY = "rts_notif_last_seen";
+const LS_KEY = "rts_notif_seen";
 
 function timeAgo(d) {
   const s = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
@@ -26,9 +26,13 @@ const ICONS = {
 export default function NotificationsBell() {
   const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
-  const [lastSeen, setLastSeen] = useState(
-    () => localStorage.getItem(LS_KEY) || "1970-01-01T00:00:00.000Z"
-  );
+  const [seenIds, setSeenIds] = useState(() => {
+    try {
+      return new Set(JSON.parse(localStorage.getItem(LS_KEY) || "[]"));
+    } catch {
+      return new Set();
+    }
+  });
   const wrapRef = useRef(null);
 
   useEffect(() => {
@@ -60,14 +64,14 @@ export default function NotificationsBell() {
     return () => document.removeEventListener("mousedown", onDoc);
   }, [open]);
 
-  const unreadCount = items.filter(
-    (n) => new Date(n.created_date) > new Date(lastSeen)
-  ).length;
+  const unreadCount = items.filter((n) => !seenIds.has(n.id)).length;
 
   const markAllRead = () => {
-    const now = new Date().toISOString();
-    localStorage.setItem(LS_KEY, now);
-    setLastSeen(now);
+    if (items.length === 0) return;
+    const next = new Set(seenIds);
+    items.forEach((n) => next.add(n.id));
+    setSeenIds(next);
+    localStorage.setItem(LS_KEY, JSON.stringify([...next]));
   };
 
   return (
@@ -104,7 +108,7 @@ export default function NotificationsBell() {
               </div>
             ) : (
               items.map((n) => {
-                const isUnread = new Date(n.created_date) > new Date(lastSeen);
+                const isUnread = !seenIds.has(n.id);
                 return (
                   <div key={n.id} className={`notif-item${isUnread ? " is-unread" : ""}`}>
                     <div className="notif-item__icon">
