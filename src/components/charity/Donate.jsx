@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import QRCode from "qrcode";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -21,7 +20,6 @@ export default function Donate() {
   const [copied, setCopied] = useState(false);
   const [modalCopied, setModalCopied] = useState(false);
   const [showPay, setShowPay] = useState(false);
-  const [qrUrl, setQrUrl] = useState("");
   const inputRef = useRef(null);
 
   const [donorName, setDonorName] = useState("");
@@ -48,18 +46,7 @@ export default function Donate() {
     return () => { delete window.__setDonateAmount; };
   }, [setAmount]);
 
-  useEffect(() => {
-    let active = true;
-    QRCode.toDataURL(upiLink(amount, noteFor(frequency)), {
-      width: 400,
-      margin: 4,
-      errorCorrectionLevel: "Q",
-      color: { dark: "#000000", light: "#ffffff" },
-    })
-      .then((url) => { if (active) setQrUrl(url); })
-      .catch(() => { if (active) setQrUrl(""); });
-    return () => { active = false; };
-  }, [amount, frequency]);
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=4&data=${encodeURIComponent(upiLink(amount, noteFor(frequency)))}`;
 
   const copyUpi = (setter) => {
     const val = CONFIG.upiId;
