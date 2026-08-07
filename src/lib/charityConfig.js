@@ -47,15 +47,14 @@ export function fmt(n) {
 }
 
 export function upiLink(amount, note) {
-  const p = new URLSearchParams();
-  p.set("pa", CONFIG.upiId);
-  p.set("pn", CONFIG.upiPayeeName || CONFIG.orgName);
-  p.set("tn", (note || ("Donation to " + CONFIG.orgName)).slice(0, 50));
+  // Keep '@' literal in the VPA — many UPI apps fail to decode %40 and reject the payment.
+  const enc = (s) => encodeURIComponent(String(s)).replace(/%40/g, "@");
+  const tn = (note || ("Donation to " + CONFIG.orgName)).slice(0, 50);
+  let q = `pa=${enc(CONFIG.upiId)}&pn=${enc(CONFIG.upiPayeeName || CONFIG.orgName)}&tn=${enc(tn)}`;
   if (amount && amount > 0) {
     const a = Number(amount);
-    if (!isNaN(a) && a > 0) p.set("am", a.toFixed(2).replace(/\.00$/, ""));
+    if (!isNaN(a) && a > 0) q += `&am=${a.toFixed(2).replace(/\.00$/, "")}`;
   }
-  p.set("cu", "INR");
-  // UPI apps decode %20 reliably; some misinterpret the '+' produced by URLSearchParams
-  return "upi://pay?" + p.toString().replace(/\+/g, "%20");
+  q += "&cu=INR";
+  return "upi://pay?" + q;
 }
