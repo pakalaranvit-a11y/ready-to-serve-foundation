@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import QRCode from "qrcode";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
@@ -29,6 +29,17 @@ export default function Donate() {
   const [anonymous, setAnonymous] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [thankYou, setThankYou] = useState("");
+  const [deepLinkHint, setDeepLinkHint] = useState(false);
+  // upi:// deep links only work on Android. iOS has no UPI intent support, and
+  // desktop has no UPI app — so the QR + copy-UPI-ID path must always be available.
+  const { isAndroid, isIOS, isMobile } = useMemo(() => {
+    const ua = (typeof navigator !== "undefined" ? navigator.userAgent : "") || "";
+    return {
+      isAndroid: /Android/i.test(ua),
+      isIOS: /iPhone|iPad|iPod/i.test(ua),
+      isMobile: /Android|iPhone|iPad|iPod/i.test(ua),
+    };
+  }, []);
 
   const matchLabel = CONFIG.presets.find((p) => p.amount === amount)?.label || "";
 
@@ -296,13 +307,13 @@ export default function Donate() {
               {frequency === "monthly" ? "Set up" : "Pay"} ₹{fmt(amount || 0)}{frequency === "monthly" ? " / month" : ""} via UPI
             </DialogTitle>
             <DialogDescription>
-              Open any UPI app on your phone (Google Pay, PhonePe, Paytm) and scan this code to complete your {frequency === "monthly" ? "monthly " : ""}donation.
+              Scan this code with any UPI app{isAndroid ? " — or tap the button below to open your UPI app" : ""} to complete your {frequency === "monthly" ? "monthly " : ""}donation.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center gap-4 py-2">
             <div
               className="rounded-xl border p-2 bg-white"
-              style={{ width: 220, height: 220, display: "grid", placeItems: "center" }}
+              style={{ width: 240, height: 240, display: "grid", placeItems: "center" }}
               aria-label="UPI QR code"
             >
               {qrUrl ? (
@@ -311,18 +322,43 @@ export default function Donate() {
                 <span style={{ fontSize: "0.8rem", color: "#55604f" }}>Generating…</span>
               )}
             </div>
+            <p className="text-xs text-center" style={{ color: "var(--ink-soft)", maxWidth: 280 }}>
+              {isMobile
+                ? "Open your UPI app (Google Pay, PhonePe, Paytm) and scan this code."
+                : "Use your phone's UPI app to scan this code."}
+            </p>
             <button type="button" onClick={() => copyUpi(setModalCopied)} className="copy-row" style={{ width: "100%" }}>
               <span className="copy-row__label">UPI ID</span>
               <span className="copy-row__value">{CONFIG.upiId}</span>
               <span className="copy-row__btn" aria-hidden="true">Copy</span>
             </button>
             {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
-            <a
-              className="btn btn--primary btn--block"
-              href={upiLink(amount, noteFor(frequency))}
-            >
-              Open in UPI app <span aria-hidden="true">→</span>
-            </a>
+            {isAndroid && (
+              <>
+                <a
+                  className="btn btn--primary btn--block"
+                  href={upiLink(amount, noteFor(frequency))}
+                  onClick={() => {
+                    setDeepLinkHint(false);
+                    setTimeout(() => {
+                      if (document.visibilityState !== "hidden") setDeepLinkHint(true);
+                    }, 2000);
+                  }}
+                >
+                  Open in UPI app <span aria-hidden="true">→</span>
+                </a>
+                {deepLinkHint && (
+                  <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
+                    Didn't open? Copy the UPI ID above and paste it in your UPI app manually.
+                  </p>
+                )}
+              </>
+            )}
+            {isIOS && (
+              <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
+                On iPhone, UPI apps can't be opened directly — please scan the code above with your UPI app, or copy the UPI ID.
+              </p>
+            )}
             {CONFIG.cardDonateUrl && (
               <a className="btn btn--ghost btn--block" href={CONFIG.cardDonateUrl} target="_blank" rel="noopener">
                 Donate by debit / credit card
