@@ -8,8 +8,8 @@ export default function DonorsPage() {
   useReveal();
   return (
     <div className="charity-site">
+      <BackHeader title="Donor Wall" />
       <PullToRefresh>
-        <BackHeader title="Donor Wall" />
         <main>
           <DonorWall />
         </main>

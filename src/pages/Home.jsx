@@ -20,8 +20,8 @@ export default function Home() {
 
   return (
     <div className="charity-site">
+      <Navbar />
       <PullToRefresh>
-        <Navbar />
         <main id="top">
           <Hero />
           <About />
