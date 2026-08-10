@@ -177,6 +177,8 @@
 .brand__text small { font-family:var(--font-body-c);font-weight:600;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;opacity:.8; }
 .nav__links { display:flex;gap:1.6rem;margin-left:auto;font-weight:600;font-size:.95rem; }
 .nav__links a { color:rgba(255,255,255,.9);transition:color .25s; }
+.nav__link-btn { background:none;border:0;cursor:pointer;font:inherit;font-weight:600;font-size:.95rem;color:var(--ink-soft);transition:color .25s;padding:0; }
+.nav__link-btn:hover { color:var(--green-600); }
 .nav.is-scrolled .nav__links a { color:var(--ink-soft); }
 .nav__links a:hover { color:var(--gold-400); }
 .nav.is-scrolled .nav__links a:hover { color:var(--green-600); }

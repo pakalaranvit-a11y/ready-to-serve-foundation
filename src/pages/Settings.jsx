@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/lib/AuthContext";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -20,17 +21,16 @@ import { CONFIG } from "@/lib/charityConfig";
 export default function Settings() {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, isAuthenticated, isLoadingAuth, logout } = useAuth();
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    base44.auth
-      .me()
-      .then((u) => setUser(u))
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
-  }, []);
+  const goSection = (id) => {
+    navigate("/");
+    setTimeout(
+      () => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      140
+    );
+  };
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -38,7 +38,7 @@ export default function Settings() {
       // Secure account deletion is simulated — the platform exposes no
       // direct delete-account endpoint, so we end the session and confirm.
       await new Promise((r) => setTimeout(r, 700));
-      await base44.auth.logout();
+      logout(false); // clear session in app state without a redirect
       toast({
         title: "Account deleted",
         description: "Your account has been permanently removed.",
@@ -64,6 +64,20 @@ export default function Settings() {
               <small>Foundation</small>
             </span>
           </Link>
+          <nav className="nav__links" aria-label="Settings">
+            <button type="button" className="nav__link-btn" onClick={() => goSection("top")}>
+              Home
+            </button>
+            <button type="button" className="nav__link-btn" onClick={() => goSection("donate")}>
+              Donate
+            </button>
+            <button type="button" className="nav__link-btn" onClick={() => goSection("donors")}>
+              Donor Wall
+            </button>
+          </nav>
+          <Link to="/" className="btn btn--primary btn--sm nav__cta">
+            Back to site
+          </Link>
         </div>
       </header>
 
@@ -74,9 +88,9 @@ export default function Settings() {
             Settings
           </h2>
 
-          {loading ? (
+          {isLoadingAuth ? (
             <p style={{ color: "var(--ink-soft)" }}>Loading…</p>
-          ) : user ? (
+          ) : isAuthenticated && user ? (
             <div className="card" data-reveal="">
               <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.2rem" }}>
                 <div

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Logo from "@/components/charity/Logo";
 import NotificationsBell from "@/components/charity/NotificationsBell";
 
@@ -22,6 +23,7 @@ export default function Navbar() {
           <a href="#impact">Your Impact</a>
           <a href="#stories">Stories</a>
           <a href="#contact">Contact</a>
+          <Link to="/settings">Settings</Link>
         </nav>
         <a href="#donate" className="btn btn--primary btn--sm nav__cta">Donate&nbsp;Now</a>
       </div>
