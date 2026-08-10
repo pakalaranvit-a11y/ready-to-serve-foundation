@@ -21,7 +21,7 @@ import Register from "@/pages/Register";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
 
-const TAB_ROUTES = ["/", "/donate", "/donors", "/settings"];
+const HIDE_TABS = ["/login", "/register", "/forgot-password", "/reset-password"];
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -66,7 +66,7 @@ const AuthenticatedApp = () => {
     }
   }
 
-  const showTabs = TAB_ROUTES.includes(location.pathname);
+  const showTabs = !HIDE_TABS.includes(location.pathname);
   return (
     <>
       <AnimatedRoutes />

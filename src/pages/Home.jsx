@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { useReveal } from "@/hooks/useReveal";
 import Navbar from "@/components/charity/Navbar";
 import Hero from "@/components/charity/Hero";
 import About from "@/components/charity/About";
@@ -15,26 +16,7 @@ import PullToRefresh from "@/components/charity/PullToRefresh";
 
 
 export default function Home() {
-  useEffect(() => {
-    const targets = document.querySelectorAll("[data-reveal]");
-    if (!("IntersectionObserver" in window)) {
-      targets.forEach((t) => t.classList.add("is-in"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-in");
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    targets.forEach((t) => io.observe(t));
-    return () => io.disconnect();
-  }, []);
+  useReveal();
 
   return (
     <div className="charity-site">
