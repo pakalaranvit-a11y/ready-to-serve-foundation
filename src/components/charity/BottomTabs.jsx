@@ -23,6 +23,12 @@ export default function BottomTabs() {
             replace
             className={`bottom-tab ${active ? "is-active" : ""}`}
             aria-current={active ? "page" : undefined}
+            onClick={(e) => {
+              if (tab.path === location.pathname) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
           >
             <Icon size={22} strokeWidth={active ? 2.4 : 1.8} />
             <span>{tab.label}</span>

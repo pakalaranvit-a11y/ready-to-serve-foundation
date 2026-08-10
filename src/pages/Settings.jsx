@@ -26,17 +26,23 @@ export default function Settings() {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      // Secure account deletion is simulated — the platform exposes no
-      // direct delete-account endpoint, so we end the session and confirm.
-      await new Promise((r) => setTimeout(r, 700));
+      // The platform exposes no direct user-deletion SDK call, so we log a
+      // deletion request (admin-processable) to the database and end the
+      // session. An admin can then complete the removal from the dashboard.
+      await base44.entities.AccountDeletionRequest.create({
+        user_email: user?.email || "",
+        user_id: user?.id || "",
+        reason: "User-initiated deletion from app settings",
+        status: "pending",
+      });
       logout(false);
       toast({
-        title: "Account deleted",
-        description: "Your account has been permanently removed.",
+        title: "Account deletion requested",
+        description: "Your request has been logged and your session has ended.",
       });
       navigate("/");
     } catch {
-      toast({ title: "Could not delete account", variant: "destructive" });
+      toast({ title: "Could not submit deletion request", variant: "destructive" });
     } finally {
       setDeleting(false);
     }
