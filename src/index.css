@@ -390,3 +390,57 @@
   * { animation:none!important;transition:none!important; }
   [data-reveal] { opacity:1;transform:none; }
 }
+
+/* =====================================================================
+   iOS native deployment optimizations
+   ===================================================================== */
+html, body { overscroll-behavior-y: none; }
+
+.btn, button, .nav, .nav__links, .seg, .seg button, .impact-card,
+.amount-btn, .amount-select, .copy-row, .notif-bell, .notif-panel__mark,
+.brand, .bottom-tab {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Safe area — status bar / notch */
+.nav { padding-top: env(safe-area-inset-top); }
+
+/* iOS-style bottom tab bar (mobile only, < 768px) */
+.bottom-tabs {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 90;
+  display: flex; justify-content: space-around; align-items: stretch;
+  background: rgba(251,247,239,.92);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -8px 30px -10px rgba(11,61,46,.18);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bottom-tab {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; flex: 1; background: none; border: 0; cursor: pointer;
+  padding: .5rem .3rem; min-height: 54px;
+  color: var(--ink-soft); font-family: inherit; font-size: .68rem; font-weight: 600;
+  transition: color .2s;
+}
+.bottom-tab span { line-height: 1; }
+.bottom-tab.is-active { color: var(--green-600); }
+.bottom-tab:active { color: var(--green-700); }
+@media (min-width: 768px) { .bottom-tabs { display: none; } }
+@media (max-width: 767px) { .charity-site { padding-bottom: calc(64px + env(safe-area-inset-bottom)); } }
+
+/* Dark mode — elegant dark green / cream */
+.dark .charity-site {
+  --cream: #0e1a14;
+  --cream-2: #0a1410;
+  --ink: #f1e9d8;
+  --ink-soft: #b9b1a0;
+  --line: rgba(255,255,255,.1);
+  --white: #16241c;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.3);
+  --shadow: 0 18px 50px -20px rgba(0,0,0,.5);
+  --shadow-lg: 0 40px 80px -30px rgba(0,0,0,.6);
+}
+.dark .nav.is-scrolled { background: rgba(14,26,20,.86); }
+.dark .bottom-tabs { background: rgba(10,20,16,.92); }
