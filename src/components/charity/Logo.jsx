@@ -2,14 +2,14 @@ import React from "react";
 import { Image } from "@/components/ui/image";
 
 const LOGO_URL =
-  "https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/2f65e6a2c_PHOTO-2026-08-09-10-16-06.jpg";
+  "https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/4b944957d_image.png";
 
 export function LogoMark({ size = 26 }) {
   return (
     <Image
       src={LOGO_URL}
       alt="Ready To Serve Foundation"
-      fittingType="fit"
+      fittingType="fill"
       className="brand__mark-img"
     />
   );
