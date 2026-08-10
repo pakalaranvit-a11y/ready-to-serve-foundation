@@ -51,6 +51,12 @@ export default function Settings() {
     }
   };
 
+  const handleSignOut = () => {
+    logout(false);
+    toast({ title: "Signed out" });
+    navigate("/");
+  };
+
   return (
     <div className="charity-site">
       <header className="nav is-scrolled">
@@ -121,6 +127,13 @@ export default function Settings() {
               </div>
 
               <div style={{ borderTop: "1px dashed var(--line)", paddingTop: "1.2rem", marginTop: "1.2rem" }}>
+                <h4 style={{ fontFamily: "var(--font-head)", marginBottom: ".8rem" }}>Account</h4>
+                <button type="button" className="btn btn--ghost btn--block" onClick={handleSignOut}>
+                  Sign out
+                </button>
+              </div>
+
+              <div style={{ borderTop: "1px dashed var(--line)", paddingTop: "1.2rem", marginTop: "1.2rem" }}>
                 <h4 style={{ fontFamily: "var(--font-head)", marginBottom: ".4rem" }}>Danger zone</h4>
                 <p style={{ color: "var(--ink-soft)", fontSize: ".9rem", marginBottom: "1rem" }}>
                   Permanently delete your account and remove your data from {CONFIG.orgName}. This action cannot be undone.
@@ -170,6 +183,11 @@ export default function Settings() {
               </button>
             </div>
           )}
+
+          <div style={{ display: "flex", gap: "1.4rem", justifyContent: "center", marginTop: "1.6rem", fontSize: ".9rem" }}>
+            <Link to="/privacy-policy" style={{ color: "var(--green-600)", fontWeight: 600 }}>Privacy Policy</Link>
+            <Link to="/support" style={{ color: "var(--green-600)", fontWeight: 600 }}>Support</Link>
+          </div>
         </div>
       </main>
 
