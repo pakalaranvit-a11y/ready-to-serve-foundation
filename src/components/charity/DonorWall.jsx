@@ -1,34 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { CONFIG, fmt } from "@/lib/charityConfig";
 
 export default function DonorWall() {
-  const [donations, setDonations] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const load = async () => {
-    try {
+  const queryClient = useQueryClient();
+  const { data: donations = [], isLoading } = useQuery({
+    queryKey: ["donations"],
+    queryFn: async () => {
       const list = await base44.entities.Donation.list("-created_date", 50);
-      setDonations(list || []);
-    } catch {
-      setDonations([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return list || [];
+    },
+  });
 
   useEffect(() => {
-    load();
-    const unsub = base44.entities.Donation.subscribe(() => load());
-    const handler = () => load();
-    window.addEventListener("donation-added", handler);
-    window.addEventListener("app-refresh", handler);
+    const unsub = base44.entities.Donation.subscribe(() => {
+      queryClient.invalidateQueries({ queryKey: ["donations"] });
+    });
     return () => {
       if (typeof unsub === "function") unsub();
-      window.removeEventListener("donation-added", handler);
-      window.removeEventListener("app-refresh", handler);
     };
-  }, []);
+  }, [queryClient]);
 
   const total = donations.reduce((s, d) => s + (Number(d.amount) || 0), 0);
 
@@ -54,7 +46,7 @@ export default function DonorWall() {
           </div>
         </div>
 
-        {loading ? (
+        {isLoading ? (
           <p style={{ color: "var(--ink-soft)" }}>Loading donors…</p>
         ) : donations.length === 0 ? (
           <div className="donorwall-empty" data-reveal="">

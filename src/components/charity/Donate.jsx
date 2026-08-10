@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import QRCode from "qrcode";
 import { base44 } from "@/api/base44Client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Dialog,
@@ -40,6 +41,28 @@ export default function Donate() {
       isMobile: /Android|iPhone|iPad|iPod/i.test(ua),
     };
   }, []);
+
+  const queryClient = useQueryClient();
+  const createDonation = useMutation({
+    mutationFn: (payload) => base44.entities.Donation.create(payload),
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({ queryKey: ["donations"] });
+      const previous = queryClient.getQueryData(["donations"]);
+      const optimistic = {
+        ...payload,
+        id: `temp-${Date.now()}`,
+        created_date: new Date().toISOString(),
+      };
+      queryClient.setQueryData(["donations"], (old) => [optimistic, ...(old || [])]);
+      return { previous };
+    },
+    onError: (_err, _payload, context) => {
+      if (context?.previous) queryClient.setQueryData(["donations"], context.previous);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["donations"] });
+    },
+  });
 
   const matchLabel = CONFIG.presets.find((p) => p.amount === amount)?.label || "";
 
@@ -99,13 +122,14 @@ export default function Donate() {
     setSubmitting(true);
     try {
       const name = anonymous ? "Anonymous" : (donorName.trim() || "Anonymous");
-      await base44.entities.Donation.create({
+      const payload = {
         donor_name: name,
         amount,
         frequency,
         message: donorMsg.trim(),
         is_anonymous: anonymous,
-      });
+      };
+      await createDonation.mutateAsync(payload);
       const who = anonymous ? "" : donorName.trim();
       setThankYou(
         `Thank you${who ? `, ${who}` : ""}! 🙏 Your ${frequency === "monthly" ? "monthly " : ""}gift of ₹${fmt(amount)} brings hot meals, medicine and dignity to our elders. The joy you've given will return to you many times over.`
@@ -120,7 +144,6 @@ export default function Donate() {
         body: `Someone just contributed ₹${fmt(amount)} to our elders — thank you for spreading the word.`,
         type: "donation",
       }).catch(() => {});
-      window.dispatchEvent(new Event("donation-added"));
     } catch (err) {
       toast({
         title: "Could not save your recognition",

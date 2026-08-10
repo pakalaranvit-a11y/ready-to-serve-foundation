@@ -20,6 +20,7 @@ export default function BottomTabs() {
           <Link
             key={tab.key}
             to={tab.path}
+            replace
             className={`bottom-tab ${active ? "is-active" : ""}`}
             aria-current={active ? "page" : undefined}
           >

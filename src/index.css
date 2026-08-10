@@ -458,7 +458,7 @@ html, body { overscroll-behavior-y: none; }
   border-bottom: 1px solid var(--line);
 }
 .back-header__btn {
-  display: grid; place-items: center; width: 38px; height: 38px;
+  display: grid; place-items: center; width: 44px; height: 44px;
   border: 0; background: none; cursor: pointer; color: var(--green-700);
   border-radius: 10px; transition: background .2s;
 }
