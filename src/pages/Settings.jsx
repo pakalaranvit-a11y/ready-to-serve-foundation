@@ -97,7 +97,7 @@ export default function Settings() {
           {isLoadingAuth ? (
             <p style={{ color: "var(--ink-soft)" }}>Loading…</p>
           ) : isAuthenticated && user ? (
-            <div className="card" data-reveal="">
+            <div className="card">
               <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.2rem" }}>
                 <div
                   style={{
@@ -170,7 +170,7 @@ export default function Settings() {
               </div>
             </div>
           ) : (
-            <div className="card" data-reveal="">
+            <div className="card">
               <p style={{ color: "var(--ink-soft)", marginBottom: "1rem" }}>
                 You're not signed in. Sign in to manage your account.
               </p>
