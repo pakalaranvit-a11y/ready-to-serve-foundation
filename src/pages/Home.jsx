@@ -11,7 +11,7 @@ import DonorWall from "@/components/charity/DonorWall";
 import Location from "@/components/charity/Location";
 import FinalCTA from "@/components/charity/FinalCTA";
 import Footer from "@/components/charity/Footer";
-import BottomTabs from "@/components/charity/BottomTabs";
+import PullToRefresh from "@/components/charity/PullToRefresh";
 
 
 export default function Home() {
@@ -38,21 +38,22 @@ export default function Home() {
 
   return (
     <div className="charity-site">
-      <Navbar />
-      <main id="top">
-        <Hero />
-        <About />
-        <Journey />
-        <Impact />
-        <Donate />
-        <DonorWall />
-        <Stories />
-        <Videos />
-        <Location />
-        <FinalCTA />
-      </main>
-      <Footer />
-      <BottomTabs />
+      <PullToRefresh>
+        <Navbar />
+        <main id="top">
+          <Hero />
+          <About />
+          <Journey />
+          <Impact />
+          <Donate />
+          <DonorWall />
+          <Stories />
+          <Videos />
+          <Location />
+          <FinalCTA />
+        </main>
+        <Footer />
+      </PullToRefresh>
     </div>
   );
 }

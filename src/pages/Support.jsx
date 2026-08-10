@@ -1,14 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { CONFIG } from "@/lib/charityConfig";
+import BackHeader from "@/components/charity/BackHeader";
 
 export default function Support() {
   return (
     <div className="charity-site">
+      <BackHeader title="Support" />
       <div className="wrap section" style={{ maxWidth: 760 }}>
-        <Link to="/" className="btn btn--ghost btn--sm" style={{ marginBottom: "1.4rem" }}>
-          ← Back to home
-        </Link>
         <h1 style={{ fontSize: "clamp(1.8rem, 5vw, 2.6rem)", marginBottom: ".6rem" }}>
           Support &amp; Contact
         </h1>

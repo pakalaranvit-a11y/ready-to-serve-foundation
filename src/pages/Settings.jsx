@@ -14,8 +14,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import { LogoMark } from "@/components/charity/Logo";
-import BottomTabs from "@/components/charity/BottomTabs";
+import BackHeader from "@/components/charity/BackHeader";
 import { CONFIG } from "@/lib/charityConfig";
 
 export default function Settings() {
@@ -24,21 +23,13 @@ export default function Settings() {
   const { user, isAuthenticated, isLoadingAuth, logout } = useAuth();
   const [deleting, setDeleting] = useState(false);
 
-  const goSection = (id) => {
-    navigate("/");
-    setTimeout(
-      () => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }),
-      140
-    );
-  };
-
   const handleDelete = async () => {
     setDeleting(true);
     try {
       // Secure account deletion is simulated — the platform exposes no
       // direct delete-account endpoint, so we end the session and confirm.
       await new Promise((r) => setTimeout(r, 700));
-      logout(false); // clear session in app state without a redirect
+      logout(false);
       toast({
         title: "Account deleted",
         description: "Your account has been permanently removed.",
@@ -59,40 +50,10 @@ export default function Settings() {
 
   return (
     <div className="charity-site">
-      <header className="nav is-scrolled">
-        <div className="wrap nav__inner">
-          <Link className="brand" to="/">
-            <span className="brand__mark" aria-hidden="true">
-              <LogoMark />
-            </span>
-            <span className="brand__text">
-              Ready&nbsp;To&nbsp;Serve
-              <small>Foundation</small>
-            </span>
-          </Link>
-          <nav className="nav__links" aria-label="Settings">
-            <button type="button" className="nav__link-btn" onClick={() => goSection("top")}>
-              Home
-            </button>
-            <button type="button" className="nav__link-btn" onClick={() => goSection("donate")}>
-              Donate
-            </button>
-            <button type="button" className="nav__link-btn" onClick={() => goSection("donors")}>
-              Donor Wall
-            </button>
-          </nav>
-          <Link to="/" className="btn btn--primary btn--sm nav__cta">
-            Back to site
-          </Link>
-        </div>
-      </header>
-
+      <BackHeader title="Settings" />
       <main className="section" style={{ minHeight: "70vh" }}>
         <div className="wrap" style={{ maxWidth: 560 }}>
           <span className="kicker">Account</span>
-          <h2 style={{ fontFamily: "var(--font-head)", fontSize: "2rem", marginBottom: "1.4rem" }}>
-            Settings
-          </h2>
 
           {isLoadingAuth ? (
             <p style={{ color: "var(--ink-soft)" }}>Loading…</p>
@@ -190,8 +151,6 @@ export default function Settings() {
           </div>
         </div>
       </main>
-
-      <BottomTabs />
     </div>
   );
 }

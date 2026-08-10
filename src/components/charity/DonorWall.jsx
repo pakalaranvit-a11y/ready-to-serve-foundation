@@ -22,9 +22,11 @@ export default function DonorWall() {
     const unsub = base44.entities.Donation.subscribe(() => load());
     const handler = () => load();
     window.addEventListener("donation-added", handler);
+    window.addEventListener("app-refresh", handler);
     return () => {
       if (typeof unsub === "function") unsub();
       window.removeEventListener("donation-added", handler);
+      window.removeEventListener("app-refresh", handler);
     };
   }, []);
 
