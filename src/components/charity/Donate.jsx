@@ -31,6 +31,7 @@ export default function Donate() {
   const [modalCopied, setModalCopied] = useState(false);
   const [showPay, setShowPay] = useState(false);
   const [qrUrl, setQrUrl] = useState("");
+  const [qrError, setQrError] = useState(false);
   const inputRef = useRef(null);
   const razorpayBtnRef = useRef(null);
   const [payMethod, setPayMethod] = useState(() => {
@@ -104,8 +105,8 @@ export default function Donate() {
       margin: 2,
       errorCorrectionLevel: "M",
     })
-      .then((url) => { if (active) setQrUrl(url); })
-      .catch(() => { if (active) setQrUrl(""); });
+      .then((url) => { if (active) { setQrUrl(url); setQrError(false); } })
+      .catch(() => { if (active) { setQrUrl(""); setQrError(true); } });
     return () => { active = false; };
   }, [amount, frequency]);
 
@@ -371,7 +372,7 @@ export default function Donate() {
               {qrUrl ? (
                 <img src={qrUrl} alt="UPI QR code" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
               ) : (
-                <span style={{ fontSize: "0.76rem", color: "#55604f" }}>Generating…</span>
+                <span style={{ fontSize: "0.76rem", color: "#55604f" }}>{qrError ? "QR unavailable — copy the UPI ID →" : "Generating…"}</span>
               )}
             </div>
             <div className="qr-block__copy">
@@ -434,7 +435,7 @@ export default function Donate() {
               {qrUrl ? (
                 <img src={qrUrl} alt="UPI QR code" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
               ) : (
-                <span style={{ fontSize: "0.8rem", color: "#55604f" }}>Generating…</span>
+                <span style={{ fontSize: "0.8rem", color: "#55604f" }}>{qrError ? "QR unavailable — copy the UPI ID below" : "Generating…"}</span>
               )}
             </div>
             <p className="text-xs text-center" style={{ color: "var(--ink-soft)", maxWidth: 280 }}>
