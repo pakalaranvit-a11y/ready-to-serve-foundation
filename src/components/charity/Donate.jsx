@@ -24,6 +24,12 @@ export default function Donate() {
   const [showPay, setShowPay] = useState(false);
   const [qrUrl, setQrUrl] = useState("");
   const inputRef = useRef(null);
+  const razorpayBtnRef = useRef(null);
+  const [payMethod, setPayMethod] = useState(() => {
+    const ua = (typeof navigator !== "undefined" ? navigator.userAgent : "") || "";
+    const ios = /iPhone|iPad|iPod/i.test(ua);
+    return ios && CONFIG.razorpay?.key && CONFIG.razorpay?.buttonId ? "razorpay" : "upi";
+  });
 
   const [donorName, setDonorName] = useState("");
   const [donorMsg, setDonorMsg] = useState("");
@@ -114,6 +120,43 @@ export default function Donate() {
     if (!amount) { e.preventDefault(); return; }
     e.preventDefault();
     setShowPay(true);
+  };
+
+  const methods = useMemo(() => [
+    "upi",
+    ...(CONFIG.razorpay?.key && CONFIG.razorpay?.buttonId ? ["razorpay"] : []),
+    ...(CONFIG.payu?.paymentLink ? ["payu"] : []),
+  ], []);
+  const effectiveMethod = methods.includes(payMethod) ? payMethod : "upi";
+
+  // Load Razorpay's no-code button.js once so it binds the hidden trigger button.
+  useEffect(() => {
+    if (!CONFIG.razorpay?.key || !CONFIG.razorpay?.buttonId) return;
+    if (document.querySelector('script[data-rzp-btn]')) return;
+    const s = document.createElement("script");
+    s.src = "https://checkout.razorpay.com/v1/button.js";
+    s.async = true;
+    s.setAttribute("data-rzp-btn", "1");
+    document.body.appendChild(s);
+  }, []);
+
+  const triggerRazorpay = () => {
+    if (!CONFIG.razorpay?.key || !CONFIG.razorpay?.buttonId) {
+      toast({ title: "Razorpay not configured yet", description: "Add your Razorpay button details in config.", variant: "destructive" });
+      return;
+    }
+    if (razorpayBtnRef.current) {
+      razorpayBtnRef.current.setAttribute("data-amount", String((amount || 0) * 100));
+      razorpayBtnRef.current.click();
+    }
+  };
+
+  const handlePayu = () => {
+    if (!CONFIG.payu?.paymentLink) {
+      toast({ title: "PayU not configured yet", description: "Add your PayU payment link in config.", variant: "destructive" });
+      return;
+    }
+    window.open(CONFIG.payu.paymentLink, "_blank", "noopener,noreferrer");
   };
 
   const submitRecognition = async (e) => {
@@ -239,18 +282,58 @@ export default function Donate() {
             {matchLabel ? `✨ ${matchLabel}` : amount > 0 ? "Thank you for your generosity ❤️" : ""}
           </p>
 
+          {CONFIG.razorpay?.key && CONFIG.razorpay?.buttonId && (
+            <button
+              ref={razorpayBtnRef}
+              type="button"
+              data-key={CONFIG.razorpay.key}
+              data-button_id={CONFIG.razorpay.buttonId}
+              data-amount={(amount || 0) * 100}
+              style={{ position: "absolute", left: "-9999px", top: 0, width: 1, height: 1 }}
+              aria-hidden="true"
+              tabIndex={-1}
+            >
+              Razorpay
+            </button>
+          )}
+
+          {methods.length > 1 && (
+            <div className="seg" role="group" aria-label="Payment method" style={{ marginBottom: "1rem" }}>
+              {methods.map((m) => (
+                <button key={m} type="button" className={effectiveMethod === m ? "is-active" : ""} onClick={() => setPayMethod(m)}>
+                  {m === "upi" ? "UPI" : m === "razorpay" ? "Razorpay" : "PayU"}
+                </button>
+              ))}
+            </div>
+          )}
+
           <button
             type="button"
-            onClick={handlePay}
+            onClick={effectiveMethod === "upi" ? handlePay : effectiveMethod === "razorpay" ? triggerRazorpay : handlePayu}
             className={`btn btn--primary btn--lg btn--block ${!amount ? "is-disabled" : ""}`}
             disabled={!amount}
           >
-            {frequency === "monthly" ? "Set up " : "Pay "}₹{fmt(amount || 0)}{frequency === "monthly" ? " / month" : ""} via UPI
+            {effectiveMethod === "upi"
+              ? `${frequency === "monthly" ? "Set up " : "Pay "}₹${fmt(amount || 0)}${frequency === "monthly" ? " / month" : ""} via UPI`
+              : effectiveMethod === "razorpay"
+              ? `Donate ₹${fmt(amount || 0)} via Razorpay`
+              : `Donate ₹${fmt(amount || 0)} via PayU`}
           </button>
-          <p className="hint">Tap pay to show a QR you can scan with any UPI app, or open the UPI app directly.</p>
-          {frequency === "monthly" && (
+          <p className="hint">
+            {effectiveMethod === "upi"
+              ? "Tap pay to show a QR you can scan with any UPI app, or open the UPI app directly."
+              : effectiveMethod === "razorpay"
+              ? "Razorpay opens a secure checkout — confirm your amount and pay by card, UPI, netbanking or wallet. Works on iPhone."
+              : "Opens PayU's secure page in a new tab — complete your donation there. Works on iPhone."}
+          </p>
+          {frequency === "monthly" && effectiveMethod === "upi" && (
             <p className="hint" style={{ color: "var(--green-600)", fontWeight: 600 }}>
               Monthly giving: approve a recurring UPI mandate in your app so your support reaches our elders every month. 🙏
+            </p>
+          )}
+          {frequency === "monthly" && effectiveMethod !== "upi" && (
+            <p className="hint" style={{ color: "var(--ink-soft)" }}>
+              Note: this gateway processes a one-time payment. For monthly giving, use UPI and approve a recurring mandate.
             </p>
           )}
 

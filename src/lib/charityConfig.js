@@ -21,6 +21,10 @@ export const CONFIG = {
   upiPayeeName: "Ready To Serve Foundation",
   bank: { accountName: "M/s. Ready To Serve Foundation", accountNumber: "030405003401", ifsc: "ICIC0000304", bankName: "ICICI Bank", branch: "Vanasthalipuram" },
   cardDonateUrl: "",
+  // Razorpay no-code Donations Button: paste the data-key and data-button_id from your Razorpay dashboard embed code.
+  razorpay: { key: "", buttonId: "" },
+  // PayU: paste a hosted payment link URL from your PayU dashboard (enable custom amount for donations).
+  payu: { paymentLink: "" },
   foundedYear: 2011,
   membersStart: 5,
   membersNow: 100,
