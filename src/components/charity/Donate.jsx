@@ -10,10 +10,18 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { CONFIG, fmt, upiLink } from "@/lib/charityConfig";
+import { CONFIG, fmt, upiLink, upiAppLink } from "@/lib/charityConfig";
 
 const noteFor = (frequency) =>
   frequency === "monthly" ? `Monthly donation to ${CONFIG.orgName}` : `Donation to ${CONFIG.orgName}`;
+
+// iOS UPI apps with their own URL schemes (the generic upi:// scheme doesn't work on iOS).
+const IOS_UPI_APPS = [
+  { id: "gpay", label: "Google Pay", store: "https://apps.apple.com/in/app/google-pay-save-pay-manage/id1193357041" },
+  { id: "phonepe", label: "PhonePe", store: "https://apps.apple.com/in/app/phonepe-upi-payments-recharge/id1170055821" },
+  { id: "paytm", label: "Paytm", store: "https://apps.apple.com/in/app/paytm-secure-upi-payments/id473941634" },
+  { id: "bhim", label: "BHIM", store: "https://apps.apple.com/in/app/bhim-bharats-own-payments-app/id1200315258" },
+];
 
 export default function Donate() {
   const { toast } = useToast();
@@ -30,6 +38,7 @@ export default function Donate() {
     const ios = /iPhone|iPad|iPod/i.test(ua);
     return ios && CONFIG.razorpay?.key && CONFIG.razorpay?.buttonId ? "razorpay" : "upi";
   });
+  const [iosFailedApp, setIosFailedApp] = useState(null);
 
   const [donorName, setDonorName] = useState("");
   const [donorMsg, setDonorMsg] = useState("");
@@ -461,9 +470,40 @@ export default function Donate() {
               </>
             )}
             {isIOS && (
-              <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
-                On iPhone, UPI apps can't be opened directly — please scan the code above with your UPI app, or copy the UPI ID.
-              </p>
+              <div className="flex flex-col gap-2 w-full">
+                <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
+                  Open your UPI app with the details filled in:
+                </p>
+                {IOS_UPI_APPS.map((app) => (
+                  <a
+                    key={app.id}
+                    className="btn btn--primary btn--block"
+                    href={upiAppLink(app.id, amount, noteFor(frequency))}
+                    onClick={() => {
+                      setIosFailedApp(null);
+                      setTimeout(() => {
+                        if (document.visibilityState !== "hidden") setIosFailedApp(app.id);
+                      }, 2000);
+                    }}
+                  >
+                    Open in {app.label} <span aria-hidden="true">→</span>
+                  </a>
+                ))}
+                {iosFailedApp && (
+                  <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
+                    Didn't open {IOS_UPI_APPS.find((a) => a.id === iosFailedApp)?.label}?{" "}
+                    <a
+                      href={IOS_UPI_APPS.find((a) => a.id === iosFailedApp)?.store}
+                      target="_blank"
+                      rel="noopener"
+                      style={{ color: "var(--green-600)", fontWeight: 700 }}
+                    >
+                      Install it from the App Store
+                    </a>{" "}
+                    — or scan the QR / copy the UPI ID above.
+                  </p>
+                )}
+              </div>
             )}
             {CONFIG.cardDonateUrl && (
               <a className="btn btn--ghost btn--block" href={CONFIG.cardDonateUrl} target="_blank" rel="noopener">

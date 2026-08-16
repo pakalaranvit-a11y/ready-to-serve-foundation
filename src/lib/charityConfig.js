@@ -50,8 +50,9 @@ export function fmt(n) {
   return Number(n).toLocaleString("en-IN");
 }
 
-export function upiLink(amount, note) {
-  // Keep '@' literal in the VPA — many UPI apps fail to decode %40 and reject the payment.
+// Shared UPI query string (pa, pn, tn, am, cu). '@' kept literal — many UPI apps
+// fail to decode %40 and reject the payment.
+export function upiQuery(amount, note) {
   const enc = (s) => encodeURIComponent(String(s)).replace(/%40/g, "@");
   const tn = (note || ("Donation to " + CONFIG.orgName)).slice(0, 50);
   let q = `pa=${enc(CONFIG.upiId)}&pn=${enc(CONFIG.upiPayeeName || CONFIG.orgName)}&tn=${enc(tn)}`;
@@ -60,5 +61,23 @@ export function upiLink(amount, note) {
     if (!isNaN(a) && a > 0) q += `&am=${a.toFixed(2).replace(/\.00$/, "")}`;
   }
   q += "&cu=INR";
-  return "upi://pay?" + q;
+  return q;
+}
+
+export function upiLink(amount, note) {
+  return "upi://pay?" + upiQuery(amount, note);
+}
+
+// iOS has no system UPI intent, so the generic upi:// scheme fails. Individual UPI
+// apps register their own URL schemes on iOS — use those to open the app with the
+// payment details prefilled. (Schemes per shambu2k/upi-intent registry.)
+export function upiAppLink(appId, amount, note) {
+  const q = upiQuery(amount, note);
+  const map = {
+    gpay: `gpay://upi/pay?${q}`,
+    phonepe: `phonepe://pay?${q}`,
+    paytm: `paytmmp://pay?${q}`,
+    bhim: `bhim://upi/pay?${q}`,
+  };
+  return map[appId] || `upi://pay?${q}`;
 }
