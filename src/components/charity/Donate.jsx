@@ -35,6 +35,7 @@ export default function Donate() {
   const inputRef = useRef(null);
   const [payMethod, setPayMethod] = useState(() => (CONFIG.razorpay?.keyId ? "razorpay" : "upi"));
   const [rzpLoading, setRzpLoading] = useState(false);
+  const [paid, setPaid] = useState(false);
   const [iosFailedApp, setIosFailedApp] = useState(null);
 
   const [donorName, setDonorName] = useState("");
@@ -171,6 +172,7 @@ export default function Donate() {
         theme: { color: "#0f5132" },
         handler: () => {
           toast({ title: "Payment successful 🙏", description: `₹${fmt(amount)} received via Razorpay.` });
+          recordDonation();
         },
       });
       rzp.open();
@@ -181,9 +183,9 @@ export default function Donate() {
     }
   };
 
-  const submitRecognition = async (e) => {
-    e.preventDefault();
-    if (!amount || submitting) return;
+  // Only called from the Razorpay success handler — i.e. after a verified payment.
+  const recordDonation = async () => {
+    if (submitting) return;
     setSubmitting(true);
     try {
       const name = anonymous ? "Anonymous" : (donorName.trim() || "Anonymous");
@@ -199,11 +201,11 @@ export default function Donate() {
       setThankYou(
         `Thank you${who ? `, ${who}` : ""}! 🙏 Your ${frequency === "monthly" ? "monthly " : ""}gift of ₹${fmt(amount)} brings hot meals, medicine and dignity to our elders. The joy you've given will return to you many times over.`
       );
+      setPaid(true);
       toast({
         title: "Thank you for your gift! 🙏",
-        description: `₹${fmt(amount)} ${frequency === "monthly" ? "monthly " : ""}recorded on our donor wall.`,
+        description: `₹${fmt(amount)} ${frequency === "monthly" ? "monthly " : ""}added to our donor wall.`,
       });
-      setDonorName(""); setDonorMsg(""); setAnonymous(false);
       base44.entities.Notification.create({
         title: "A new donor joined our family 🙏",
         body: `Someone just contributed ₹${fmt(amount)} to our elders — thank you for spreading the word.`,
@@ -211,8 +213,8 @@ export default function Donate() {
       }).catch(() => {});
     } catch (err) {
       toast({
-        title: "Could not save your recognition",
-        description: "Your UPI payment still went through — please try adding your name again.",
+        title: "Payment succeeded but we couldn't save your wall entry",
+        description: "Please contact us so we can add you manually.",
         variant: "destructive",
       });
     } finally {
@@ -344,23 +346,29 @@ export default function Donate() {
 
           {thankYou && <div className="thanks-box" role="status">{thankYou}</div>}
 
-          <form className="recog" onSubmit={submitRecognition}>
-            <h4>Add your name to our donor wall</h4>
-            <p>After you pay, enter your name so we can thank you publicly on our donor wall.</p>
+          <div className="recog">
+            <h4>Your details for our donor wall</h4>
+            <p>
+              {effectiveMethod === "razorpay"
+                ? "Enter your name — we'll add it to the donor wall automatically once your Razorpay payment is confirmed."
+                : "Enter your name. For UPI, our team adds you to the donor wall after manually confirming your transfer."}
+            </p>
             <label className="field">
-              <input type="text" placeholder="Your name" value={donorName} onChange={(e) => setDonorName(e.target.value)} disabled={anonymous} maxLength={60} />
+              <input type="text" placeholder="Your name" value={donorName} onChange={(e) => setDonorName(e.target.value)} disabled={anonymous || paid} maxLength={60} />
             </label>
             <label className="field">
               <textarea rows={2} placeholder="A message for the elders (optional)" value={donorMsg} onChange={(e) => setDonorMsg(e.target.value)} maxLength={160} />
             </label>
             <div className="recog__row">
-              <input type="checkbox" id="anon" checked={anonymous} onChange={(e) => setAnonymous(e.target.checked)} />
+              <input type="checkbox" id="anon" checked={anonymous} onChange={(e) => setAnonymous(e.target.checked)} disabled={paid} />
               <label htmlFor="anon">Donate anonymously</label>
             </div>
-            <button type="submit" className="btn btn--ghost btn--block" disabled={!amount || submitting}>
-              {submitting ? "Saving…" : "Add my donation to the wall"}
-            </button>
-          </form>
+            {paid && (
+              <p className="hint" style={{ color: "var(--green-600)", fontWeight: 600 }}>
+                ✓ Payment confirmed — your name is on the donor wall. Thank you! 🙏
+              </p>
+            )}
+          </div>
 
           <div className="qr-block">
             <div className="qr-block__code" aria-label="UPI QR code">
