@@ -33,7 +33,7 @@ export default function Donate() {
   const [qrUrl, setQrUrl] = useState("");
   const [qrError, setQrError] = useState(false);
   const inputRef = useRef(null);
-  const [payMethod, setPayMethod] = useState("upi");
+  const [payMethod, setPayMethod] = useState(() => (CONFIG.razorpay?.keyId ? "razorpay" : "upi"));
   const [rzpLoading, setRzpLoading] = useState(false);
   const [iosFailedApp, setIosFailedApp] = useState(null);
 
