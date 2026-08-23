@@ -135,7 +135,7 @@ export default function Donate() {
   const methods = useMemo(() => [
     "upi",
     ...(CONFIG.razorpay?.key && CONFIG.razorpay?.buttonId ? ["razorpay"] : []),
-    ...(CONFIG.payu?.paymentLink ? ["payu"] : []),
+    "payu",
   ], []);
   const effectiveMethod = methods.includes(payMethod) ? payMethod : "upi";
 
