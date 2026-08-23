@@ -22,27 +22,13 @@ export const CONFIG = {
   bank: { accountName: "M/s. Ready To Serve Foundation", accountNumber: "030405003401", ifsc: "ICIC0000304", bankName: "ICICI Bank", branch: "Vanasthalipuram" },
   cardDonateUrl: "",
   // ─────────────────────────────────────────────────────────────────────
-  // RAZORPAY — no-code Donations Button (no secret API key needed)
+  // RAZORPAY — Standard Checkout (key ID here, secret kept server-side)
   // ─────────────────────────────────────────────────────────────────────
-  // Steps:
-  //  1. Log in to https://dashboard.razorpay.com
-  //  2. Left menu → "Donations" → create/enable your donation page
-  //  3. Click "Embed" / "Get embed code"
-  //  4. In the generated HTML find: <button data-key="rzp_live_XXXX" data-button_id="pl_YYYY" ...>
-  //  5. Copy the rzp_live_XXXX value → paste below as `key`
-  //  6. Copy the pl_YYYY value → paste below as `buttonId`
-  // Both values are PUBLIC (safe to ship in the app). No secret key is used.
-  razorpay: { key: "", buttonId: "" },
-  // ─────────────────────────────────────────────────────────────────────
-  // PAYU — hosted payment link (no API key needed)
-  // ─────────────────────────────────────────────────────────────────────
-  // Steps:
-  //  1. Log in to https://onetpl.payu.in
-  //  2. Left menu → "Payment Links" → "Create Link"
-  //  3. Set amount to "Customer decides" (lets donors enter any amount)
-  //  4. Save and copy the shareable URL, e.g. https://payu.in/pay/abcdef123
-  //  5. Paste that URL below as `paymentLink`
-  payu: { paymentLink: "" },
+  // `keyId` is the PUBLIC key ID (rzp_test_... or rzp_live_...) — safe in the app.
+  // The Key Secret is stored as app secrets (RAZORPAY_KEY_SECRET) and used only
+  // by the `createRazorpayOrder` backend function to create the order.
+  // For real donations, switch keyId to your rzp_live_... key + live secret.
+  razorpay: { keyId: "rzp_test_TTNK8VJyawo4il" },
   foundedYear: 2011,
   membersStart: 5,
   membersNow: 100,
