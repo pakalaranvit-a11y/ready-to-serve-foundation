@@ -36,6 +36,7 @@ export default function Donate() {
   const [payMethod, setPayMethod] = useState(() => (CONFIG.razorpay?.keyId ? "razorpay" : "upi"));
   const [rzpLoading, setRzpLoading] = useState(false);
   const [paid, setPaid] = useState(false);
+  const [recorded, setRecorded] = useState(false);
   const [iosFailedApp, setIosFailedApp] = useState(null);
 
   const [donorName, setDonorName] = useState("");
@@ -172,7 +173,7 @@ export default function Donate() {
         theme: { color: "#0f5132" },
         handler: () => {
           toast({ title: "Payment successful 🙏", description: `₹${fmt(amount)} received via Razorpay.` });
-          recordDonation();
+          setPaid(true);
         },
       });
       rzp.open();
@@ -183,9 +184,9 @@ export default function Donate() {
     }
   };
 
-  // Only called from the Razorpay success handler — i.e. after a verified payment.
+  // Called by the gated "Add to donor wall" button — only enabled after Razorpay confirms payment.
   const recordDonation = async () => {
-    if (submitting) return;
+    if (submitting || recorded) return;
     setSubmitting(true);
     try {
       const name = anonymous ? "Anonymous" : (donorName.trim() || "Anonymous");
@@ -201,7 +202,7 @@ export default function Donate() {
       setThankYou(
         `Thank you${who ? `, ${who}` : ""}! 🙏 Your ${frequency === "monthly" ? "monthly " : ""}gift of ₹${fmt(amount)} brings hot meals, medicine and dignity to our elders. The joy you've given will return to you many times over.`
       );
-      setPaid(true);
+      setRecorded(true);
       toast({
         title: "Thank you for your gift! 🙏",
         description: `₹${fmt(amount)} ${frequency === "monthly" ? "monthly " : ""}added to our donor wall.`,
@@ -350,7 +351,7 @@ export default function Donate() {
             <h4>Your details for our donor wall</h4>
             <p>
               {effectiveMethod === "razorpay"
-                ? "Enter your name — we'll add it to the donor wall automatically once your Razorpay payment is confirmed."
+                ? "Enter your name. The button below unlocks only after your Razorpay payment is confirmed — then you can add yourself to the wall once."
                 : "Enter your name. For UPI, our team adds you to the donor wall after manually confirming your transfer."}
             </p>
             <label className="field">
@@ -363,7 +364,19 @@ export default function Donate() {
               <input type="checkbox" id="anon" checked={anonymous} onChange={(e) => setAnonymous(e.target.checked)} disabled={paid} />
               <label htmlFor="anon">Donate anonymously</label>
             </div>
-            {paid && (
+            <button
+              type="button"
+              className="btn btn--ghost btn--block"
+              disabled={!paid || recorded || submitting}
+              onClick={recordDonation}
+            >
+              {recorded
+                ? "✓ Added to the donor wall"
+                : paid
+                ? (submitting ? "Saving…" : "Add my donation to the wall")
+                : "Pay first to add your name to the wall"}
+            </button>
+            {recorded && (
               <p className="hint" style={{ color: "var(--green-600)", fontWeight: 600 }}>
                 ✓ Payment confirmed — your name is on the donor wall. Thank you! 🙏
               </p>
