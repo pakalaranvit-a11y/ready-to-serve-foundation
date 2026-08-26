@@ -380,6 +380,26 @@
 @media (max-width: 680px) { .supporters__grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 420px) { .supporters__grid { grid-template-columns: 1fr; } }
 
+/* Social links */
+.footer__social { display:flex; gap:.6rem; margin-top:1rem; }
+.footer__social a { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.1); color:var(--gold-400); transition:background .2s,color .2s,transform .2s; }
+.footer__social a:hover { background:var(--gold-400); color:var(--green-900); transform:translateY(-2px); }
+.nav__social { display:inline-flex; gap:.5rem; align-items:center; margin-left:.4rem; }
+.nav__social a { display:grid; place-items:center; width:32px; height:32px; border-radius:50%; color:inherit; transition:color .2s,transform .2s; }
+.nav__social a:hover { color:var(--gold-400); transform:translateY(-1px); }
+.nav.is-scrolled .nav__social a { color:var(--ink-soft); }
+.nav.is-scrolled .nav__social a:hover { color:var(--green-600); }
+
+/* UPI app quick-pay buttons */
+.upi-apps { margin-top:.4rem; }
+.upi-apps__row { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
+.upi-apps__btn { display:flex; align-items:center; justify-content:center; padding:.6em .4em; border-radius:12px; background:var(--cream); border:1.5px solid var(--line); font-weight:700; font-size:.82rem; color:var(--green-700); transition:border .2s,background .2s,transform .2s; }
+.upi-apps__btn:hover { border-color:var(--green-500); background:#fff; transform:translateY(-1px); }
+
+/* Hero logo (main page visual) */
+.hero__logo { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:clamp(190px,42vw,380px); z-index:1; opacity:.18; pointer-events:none; }
+.hero__logo img { width:100%; height:auto; border-radius:50%; }
+
 /* Reveal animation */
 [data-reveal] { opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease); }
 [data-reveal].is-in { opacity:1;transform:none; }

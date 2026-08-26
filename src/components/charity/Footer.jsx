@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { LogoMark } from "@/components/charity/Logo";
 import { CONFIG } from "@/lib/charityConfig";
+import { Instagram, Facebook, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -18,6 +19,17 @@ export default function Footer() {
           </a>
           <p className="footer__tag">“{CONFIG.motto}”</p>
           <p className="footer__blurb">{CONFIG.tagline}</p>
+          <div className="footer__social">
+            {CONFIG.social?.instagram && (
+              <a href={CONFIG.social.instagram} target="_blank" rel="noopener" aria-label="Instagram"><Instagram size={18} /></a>
+            )}
+            {CONFIG.social?.facebook && (
+              <a href={CONFIG.social.facebook} target="_blank" rel="noopener" aria-label="Facebook"><Facebook size={18} /></a>
+            )}
+            {CONFIG.social?.youtube && (
+              <a href={CONFIG.social.youtube} target="_blank" rel="noopener" aria-label="YouTube"><Youtube size={18} /></a>
+            )}
+          </div>
         </div>
         <div className="footer__col">
           <h4>Contact</h4>

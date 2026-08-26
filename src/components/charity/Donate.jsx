@@ -345,6 +345,19 @@ export default function Donate() {
             </p>
           )}
 
+          {effectiveMethod === "upi" && isMobile && (
+            <div className="upi-apps">
+              <p className="hint" style={{ marginBottom: ".5rem" }}>Or pay directly with an app:</p>
+              <div className="upi-apps__row">
+                {IOS_UPI_APPS.filter((a) => ["gpay", "phonepe", "paytm"].includes(a.id)).map((app) => (
+                  <a key={app.id} className="upi-apps__btn" href={upiAppLink(app.id, amount, noteFor(frequency))}>
+                    {app.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
           {thankYou && <div className="thanks-box" role="status">{thankYou}</div>}
 
           <div className="recog">

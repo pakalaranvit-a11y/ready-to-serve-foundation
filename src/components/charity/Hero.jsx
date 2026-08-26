@@ -36,12 +36,10 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero__bg" aria-hidden="true">
-        <img
-          src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/9ea11f2fb_image.png"
-          alt=""
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-        />
         <div className="hero__scrim" />
+      </div>
+      <div className="hero__logo" aria-hidden="true">
+        <img src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/4b944957d_image.png" alt="" />
       </div>
       <div className="wrap hero__inner">
         <span className="eyebrow">Free Old Age Home · Vanasthalipuram, Hyderabad</span>

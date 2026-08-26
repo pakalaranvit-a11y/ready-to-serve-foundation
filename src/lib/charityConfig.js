@@ -48,6 +48,12 @@ export const CONFIG = {
   ],
   defaultAmount: 2000,
   instagramReel: "https://www.instagram.com/reel/DX4B9sgsQLS/",
+  // Edit these to your exact account URLs if they differ.
+  social: {
+    instagram: "https://www.instagram.com/readytoservefoundation/",
+    facebook: "https://www.facebook.com/readytoservefoundation",
+    youtube: "https://www.youtube.com/@readytoservefoundation",
+  },
 };
 
 export function fmt(n) {
