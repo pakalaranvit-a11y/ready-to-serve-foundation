@@ -345,7 +345,7 @@ export default function Donate() {
             </p>
           )}
 
-          {effectiveMethod === "upi" && isMobile && (
+          {isMobile && (
             <div className="upi-apps">
               <p className="hint" style={{ marginBottom: ".5rem" }}>Or pay directly with an app:</p>
               <div className="upi-apps__row">

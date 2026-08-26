@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Instagram } from "lucide-react";
+import { Instagram, Facebook } from "lucide-react";
 import { CONFIG, upiAppLink } from "@/lib/charityConfig";
 
 function AnimatedCounter({ target, duration = 1400 }) {
@@ -55,7 +55,9 @@ export default function Hero() {
           <a href="#donate" className="btn btn--primary btn--lg">
             Donate now <span aria-hidden="true">→</span>
           </a>
-          <a href="#stories" className="btn btn--ghost btn--lg">Watch their stories</a>
+          <a href={CONFIG.social?.instagram} target="_blank" rel="noopener" className="btn btn--ghost btn--lg">
+            Watch their stories
+          </a>
         </div>
         <div className="hero__quick">
           <a className="hero__quick-btn hero__quick-btn--ig" href={CONFIG.social?.instagram} target="_blank" rel="noopener">
@@ -64,6 +66,11 @@ export default function Hero() {
           <a className="hero__quick-btn" href={upiAppLink("gpay", 0, `Donation to ${CONFIG.orgName}`)}>GPay</a>
           <a className="hero__quick-btn" href={upiAppLink("phonepe", 0, `Donation to ${CONFIG.orgName}`)}>PhonePe</a>
           <a className="hero__quick-btn" href={upiAppLink("paytm", 0, `Donation to ${CONFIG.orgName}`)}>Paytm</a>
+          {CONFIG.social?.facebook && (
+            <a className="hero__quick-btn hero__quick-btn--fb" href={CONFIG.social.facebook} target="_blank" rel="noopener">
+              <Facebook size={16} /> Facebook
+            </a>
+          )}
         </div>
         <ul className="hero__stats" role="list">
           <li>

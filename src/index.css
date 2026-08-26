@@ -206,6 +206,7 @@
 .hero__quick-btn { display:inline-flex; align-items:center; gap:.4rem; padding:.5em .9em; border-radius:100px; font-weight:700; font-size:.82rem; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); color:#fff; backdrop-filter:blur(6px); transition:background .2s,transform .2s; }
 .hero__quick-btn:hover { background:rgba(255,255,255,.22); transform:translateY(-1px); }
 .hero__quick-btn--ig { background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af); border:0; }
+.hero__quick-btn--fb { background:#1877f2; border:0; }
 
 /* Section heads */
 .section__head { max-width:680px;margin-bottom:clamp(2rem,5vw,3.4rem); }

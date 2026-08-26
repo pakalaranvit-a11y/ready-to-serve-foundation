@@ -50,9 +50,9 @@ export const CONFIG = {
   instagramReel: "https://www.instagram.com/reel/DX4B9sgsQLS/",
   // Edit these to your exact account URLs if they differ.
   social: {
-    instagram: "https://www.instagram.com/readytoservefoundation/",
-    facebook: "https://www.facebook.com/readytoservefoundation",
-    youtube: "https://www.youtube.com/@readytoservefoundation",
+    instagram: "https://www.instagram.com/readytoservefoundations/",
+    facebook: "https://www.facebook.com/ready2servefoundation/",
+    youtube: "",
   },
 };
 
