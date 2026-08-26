@@ -202,6 +202,11 @@
 .hero__scroll { position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:1.5rem;animation:bob 1.8s var(--ease) infinite; }
 @keyframes bob { 0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)} }
 
+.hero__quick { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.4rem; align-items:center; }
+.hero__quick-btn { display:inline-flex; align-items:center; gap:.4rem; padding:.5em .9em; border-radius:100px; font-weight:700; font-size:.82rem; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); color:#fff; backdrop-filter:blur(6px); transition:background .2s,transform .2s; }
+.hero__quick-btn:hover { background:rgba(255,255,255,.22); transform:translateY(-1px); }
+.hero__quick-btn--ig { background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af); border:0; }
+
 /* Section heads */
 .section__head { max-width:680px;margin-bottom:clamp(2rem,5vw,3.4rem); }
 .section__head h2 { font-size:clamp(1.9rem,4.5vw,3rem); }
