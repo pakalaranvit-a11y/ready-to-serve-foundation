@@ -1,16 +1,25 @@
 import React from "react";
 import { CONFIG } from "@/lib/charityConfig";
 
-function StoryCard({ caption, src, alt }) {
+function StoryCard({ caption, src, alt, href }) {
+  const target = href || CONFIG.social?.instagram || CONFIG.instagramReel;
   return (
-    <figure className="story" data-reveal="">
-      <img
-        src={src}
-        alt={alt}
-        style={{ width: "100%", aspectRatio: "9/12", objectFit: "cover", display: "block" }}
-      />
-      <figcaption>{caption}</figcaption>
-    </figure>
+    <a className="story story--link" href={target} target="_blank" rel="noopener" data-reveal="">
+      <figure style={{ margin: 0 }}>
+        <span className="story__media">
+          <img
+            src={src}
+            alt={alt}
+            style={{ width: "100%", aspectRatio: "9/12", objectFit: "cover", display: "block" }}
+          />
+          <span className="story__play" aria-hidden="true">▶</span>
+        </span>
+        <figcaption>
+          {caption}
+          <span className="story__cta">Watch on Instagram →</span>
+        </figcaption>
+      </figure>
+    </a>
   );
 }
 
@@ -30,11 +39,13 @@ export default function Stories() {
             src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/66b8544b3_image.png"
             alt="An elderly man and woman clapping joyfully at a birthday celebration in the home"
             caption="అన్నదాత! సుఖీభవ! — Blessings to every giver. A sponsored birthday at the home."
+            href="https://www.instagram.com/reel/DOu9LU0EqBx/"
           />
           <StoryCard
             src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/fbd7abbf8_PHOTO-2026-07-18-13-10-22.jpg"
             alt="Elderly residents and caretakers of the Ready To Serve Foundation standing together, a visitor being honoured with a pink shawl"
             caption="Our residents, together as a family."
+            href={CONFIG.instagramReel}
           />
           <StoryCard
             src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/f54da18fa_PHOTO-2026-07-18-13-10-23.jpg"
