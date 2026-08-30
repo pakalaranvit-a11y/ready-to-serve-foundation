@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Share2 } from "lucide-react";
 import { CONFIG } from "@/lib/charityConfig";
+import DonateNowButton from "@/components/charity/DonateNowButton";
 
 export default function FinalCTA() {
   const [shared, setShared] = useState(false);
@@ -29,9 +30,7 @@ export default function FinalCTA() {
       <div className="wrap finalcta__inner" data-reveal="">
         <h2>One meal. One elder. Today.</h2>
         <p>It takes less than a minute, and it changes someone's whole day.</p>
-        <a href="#donate" className="btn btn--primary btn--lg">
-          Donate now <span aria-hidden="true">→</span>
-        </a>
+        <DonateNowButton />
         <div style={{ marginTop: "1.4rem", display: "flex", justifyContent: "center", gap: ".8rem", flexWrap: "wrap", alignItems: "center" }}>
           <button
             type="button"

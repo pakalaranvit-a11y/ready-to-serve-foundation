@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Logo from "@/components/charity/Logo";
 import NotificationsBell from "@/components/charity/NotificationsBell";
+import DonateNowButton from "@/components/charity/DonateNowButton";
 import { CONFIG } from "@/lib/charityConfig";
 import { Instagram, Facebook, Youtube } from "lucide-react";
 
@@ -32,7 +33,7 @@ export default function Navbar() {
           </span>
           <Link to="/settings">Settings</Link>
         </nav>
-        <a href="#donate" className="btn btn--primary btn--sm nav__cta">Donate&nbsp;Now</a>
+        <DonateNowButton className="btn btn--primary btn--sm nav__cta">Donate&nbsp;Now</DonateNowButton>
       </div>
     </header>
   );

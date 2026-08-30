@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Instagram, Facebook } from "lucide-react";
 import { CONFIG, upiAppLink } from "@/lib/charityConfig";
+import DonateNowButton from "@/components/charity/DonateNowButton";
 
 function AnimatedCounter({ target, duration = 1400 }) {
   const ref = useRef(null);
@@ -52,9 +53,7 @@ export default function Hero() {
           At the Ready&nbsp;To&nbsp;Serve Foundation we give abandoned and destitute elders a home — meals, medicine, dignity and family. Your donation goes <strong>directly</strong> to the people who need it most.
         </p>
         <div className="hero__cta">
-          <a href="#donate" className="btn btn--primary btn--lg">
-            Donate now <span aria-hidden="true">→</span>
-          </a>
+          <DonateNowButton />
           <a href={CONFIG.social?.instagram} target="_blank" rel="noopener" className="btn btn--ghost btn--lg">
             Watch their stories
           </a>
