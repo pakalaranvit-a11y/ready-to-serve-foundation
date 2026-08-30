@@ -13,6 +13,7 @@ import DonorWall from "@/components/charity/DonorWall";
 import Location from "@/components/charity/Location";
 import FinalCTA from "@/components/charity/FinalCTA";
 import Footer from "@/components/charity/Footer";
+import SocialLinks from "@/components/charity/SocialLinks";
 import PullToRefresh from "@/components/charity/PullToRefresh";
 
 
@@ -33,6 +34,7 @@ export default function Home() {
           <Stories />
           <NotableSupporters />
           <Videos />
+          <SocialLinks />
           <Location />
           <FinalCTA />
         </main>

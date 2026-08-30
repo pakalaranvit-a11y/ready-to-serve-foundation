@@ -40,7 +40,12 @@ export default function Footer() {
           {CONFIG.email && (
             <p><a href={`mailto:${CONFIG.email}`}>{CONFIG.email}</a></p>
           )}
-          <p><a href={CONFIG.instagramReel} target="_blank" rel="noopener" className="link-strong">Instagram →</a></p>
+          {CONFIG.social?.instagram && (
+            <p><a href={CONFIG.social.instagram} target="_blank" rel="noopener" className="link-strong">Instagram →</a></p>
+          )}
+          {CONFIG.social?.facebook && (
+            <p><a href={CONFIG.social.facebook} target="_blank" rel="noopener" className="link-strong">Facebook →</a></p>
+          )}
         </div>
         <div className="footer__col">
           <h4>Give</h4>

@@ -386,6 +386,18 @@
 @media (max-width: 680px) { .supporters__grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 420px) { .supporters__grid { grid-template-columns: 1fr; } }
 
+/* Follow-us social strip */
+.social-strip { background:var(--cream); }
+.social-strip__row { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1rem; }
+.social-strip__card { display:flex; flex-direction:column; align-items:center; gap:.35rem; text-align:center; padding:1.4rem 1rem; border-radius:var(--radius-c); color:#fff; box-shadow:var(--shadow-sm); transition:transform .25s var(--ease),box-shadow .25s; }
+.social-strip__card:hover { transform:translateY(-4px); box-shadow:var(--shadow); }
+.social-strip__card strong { font-family:var(--font-head); font-size:1.1rem; }
+.social-strip__card span { font-size:.84rem; opacity:.9; word-break:break-word; }
+.social-strip__card--ig { background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af); }
+.social-strip__card--fb { background:#1877f2; }
+.social-strip__card--reel { background:linear-gradient(135deg,#8134af,#515bd4); }
+.social-strip__card--yt { background:#ff0000; }
+
 /* Social links */
 .footer__social { display:flex; gap:.6rem; margin-top:1rem; }
 .footer__social a { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.1); color:var(--gold-400); transition:background .2s,color .2s,transform .2s; }
