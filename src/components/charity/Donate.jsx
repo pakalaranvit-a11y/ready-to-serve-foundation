@@ -15,12 +15,11 @@ import { CONFIG, fmt, upiLink, upiAppLink } from "@/lib/charityConfig";
 const noteFor = (frequency) =>
   frequency === "monthly" ? `Monthly donation to ${CONFIG.orgName}` : `Donation to ${CONFIG.orgName}`;
 
-// iOS UPI apps with their own URL schemes (the generic upi:// scheme doesn't work on iOS).
-const IOS_UPI_APPS = [
-  { id: "gpay", label: "Google Pay", store: "https://apps.apple.com/in/app/google-pay-save-pay-manage/id1193357041" },
+// UPI apps opened by their own URL scheme (the generic upi:// scheme doesn't work on iOS).
+const PAY_APPS = [
+  { id: "gpay", label: "GPay", store: "https://apps.apple.com/in/app/google-pay-save-pay-manage/id1193357041" },
   { id: "phonepe", label: "PhonePe", store: "https://apps.apple.com/in/app/phonepe-upi-payments-recharge/id1170055821" },
   { id: "paytm", label: "Paytm", store: "https://apps.apple.com/in/app/paytm-secure-upi-payments/id473941634" },
-  { id: "bhim", label: "BHIM", store: "https://apps.apple.com/in/app/bhim-bharats-own-payments-app/id1200315258" },
 ];
 
 export default function Donate() {
@@ -349,7 +348,7 @@ export default function Donate() {
             <div className="upi-apps">
               <p className="hint" style={{ marginBottom: ".5rem" }}>Or pay directly with an app:</p>
               <div className="upi-apps__row">
-                {IOS_UPI_APPS.filter((a) => ["gpay", "phonepe", "paytm"].includes(a.id)).map((app) => (
+                {PAY_APPS.map((app) => (
                   <a key={app.id} className="upi-apps__btn" href={upiAppLink(app.id, amount, noteFor(frequency))}>
                     {app.label}
                   </a>
@@ -478,63 +477,58 @@ export default function Donate() {
               <span className="copy-row__btn" aria-hidden="true">Copy</span>
             </button>
             {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
-            {isAndroid && (
-              <>
+            <div className="flex flex-col gap-2 w-full">
+              <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
+                Or pay with an app — details filled in for you:
+              </p>
+              {PAY_APPS.map((app) => (
                 <a
+                  key={app.id}
                   className="btn btn--primary btn--block"
-                  href={upiLink(amount, noteFor(frequency))}
+                  href={upiAppLink(app.id, amount, noteFor(frequency))}
                   onClick={() => {
-                    setDeepLinkHint(false);
+                    setIosFailedApp(null);
                     setTimeout(() => {
-                      if (document.visibilityState !== "hidden") setDeepLinkHint(true);
+                      if (document.visibilityState !== "hidden") setIosFailedApp(app.id);
                     }, 2000);
                   }}
                 >
-                  Open in UPI app <span aria-hidden="true">→</span>
+                  Pay ₹{fmt(amount || 0)} with {app.label} <span aria-hidden="true">→</span>
                 </a>
-                {deepLinkHint && (
-                  <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
-                    Didn't open? Copy the UPI ID above and paste it in your UPI app manually.
-                  </p>
-                )}
-              </>
-            )}
-            {isIOS && (
-              <div className="flex flex-col gap-2 w-full">
+              ))}
+              {iosFailedApp && (
                 <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
-                  Open your UPI app with the details filled in:
+                  Didn't open {PAY_APPS.find((a) => a.id === iosFailedApp)?.label}?{" "}
+                  {PAY_APPS.find((a) => a.id === iosFailedApp)?.store && (
+                    <>
+                      <a
+                        href={PAY_APPS.find((a) => a.id === iosFailedApp)?.store}
+                        target="_blank"
+                        rel="noopener"
+                        style={{ color: "var(--green-600)", fontWeight: 700 }}
+                      >
+                        Install it
+                      </a>{" "}
+                      —{" "}
+                    </>
+                  )}
+                  or scan the QR / copy the UPI ID above.
                 </p>
-                {IOS_UPI_APPS.map((app) => (
-                  <a
-                    key={app.id}
-                    className="btn btn--primary btn--block"
-                    href={upiAppLink(app.id, amount, noteFor(frequency))}
-                    onClick={() => {
-                      setIosFailedApp(null);
-                      setTimeout(() => {
-                        if (document.visibilityState !== "hidden") setIosFailedApp(app.id);
-                      }, 2000);
-                    }}
-                  >
-                    Open in {app.label} <span aria-hidden="true">→</span>
-                  </a>
-                ))}
-                {iosFailedApp && (
-                  <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
-                    Didn't open {IOS_UPI_APPS.find((a) => a.id === iosFailedApp)?.label}?{" "}
-                    <a
-                      href={IOS_UPI_APPS.find((a) => a.id === iosFailedApp)?.store}
-                      target="_blank"
-                      rel="noopener"
-                      style={{ color: "var(--green-600)", fontWeight: 700 }}
-                    >
-                      Install it from the App Store
-                    </a>{" "}
-                    — or scan the QR / copy the UPI ID above.
-                  </p>
-                )}
-              </div>
-            )}
+              )}
+              {CONFIG.razorpay?.keyId && (
+                <button
+                  type="button"
+                  className="btn btn--ghost btn--block"
+                  disabled={rzpLoading}
+                  onClick={() => {
+                    setShowPay(false);
+                    triggerRazorpay();
+                  }}
+                >
+                  {rzpLoading ? "Opening secure checkout…" : `Pay ₹${fmt(amount || 0)} with Razorpay (card / netbanking)`}
+                </button>
+              )}
+            </div>
             {CONFIG.cardDonateUrl && (
               <a className="btn btn--ghost btn--block" href={CONFIG.cardDonateUrl} target="_blank" rel="noopener">
                 Donate by debit / credit card
