@@ -332,6 +332,8 @@
 .seg { display:flex; gap:.4rem; background:var(--cream); border:1.5px solid var(--line); border-radius:14px; padding:4px; margin-bottom:1rem; }
 .seg button { flex:1; padding:.6em .8em; border-radius:10px; border:0; cursor:pointer; font-weight:700; font-family:inherit; font-size:.92rem; background:transparent; color:var(--ink-soft); transition:background .2s,color .2s; }
 .seg button.is-active { background:linear-gradient(135deg,var(--green-600),var(--green-500)); color:#fff; }
+.seg--wrap { flex-wrap:wrap; }
+.seg--wrap button { flex:1 1 30%; font-size:.86rem; padding:.55em .5em; }
 .thanks-box { margin:1rem 0; background:linear-gradient(135deg,rgba(27,158,95,.12),rgba(224,169,59,.14)); border:1.5px solid var(--green-500); border-radius:14px; padding:1rem 1.1rem; font-weight:600; color:var(--green-900); line-height:1.5; }
 .recog { margin-top:1.4rem; padding-top:1.4rem; border-top:1px dashed var(--line); }
 .recog h4 { font-family:var(--font-head); font-size:1.1rem; margin-bottom:.3rem; }

@@ -131,8 +131,13 @@ export default function Donate() {
 
   const methods = useMemo(() => [
     "upi",
+    "gpay",
+    "phonepe",
+    "paytm",
     ...(CONFIG.razorpay?.keyId ? ["razorpay"] : []),
   ], []);
+  const METHOD_LABELS = { upi: "UPI / QR", gpay: "GPay", phonepe: "PhonePe", paytm: "Paytm", razorpay: "Razorpay" };
+  const isAppMethod = (m) => ["gpay", "phonepe", "paytm"].includes(m);
   const effectiveMethod = methods.includes(payMethod) ? payMethod : "upi";
 
   // Load Razorpay Checkout SDK once.
@@ -307,32 +312,55 @@ export default function Donate() {
           </p>
 
           {methods.length > 1 && (
-            <div className="seg" role="group" aria-label="Payment method" style={{ marginBottom: "1rem" }}>
+            <div className="seg seg--wrap" role="group" aria-label="Payment method" style={{ marginBottom: "1rem" }}>
               {methods.map((m) => (
                 <button key={m} type="button" className={effectiveMethod === m ? "is-active" : ""} onClick={() => setPayMethod(m)}>
-                  {m === "upi" ? "UPI" : "Razorpay"}
+                  {METHOD_LABELS[m]}
                 </button>
               ))}
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={effectiveMethod === "upi" ? handlePay : triggerRazorpay}
-            className={`btn btn--primary btn--lg btn--block ${!amount || rzpLoading ? "is-disabled" : ""}`}
-            disabled={!amount || rzpLoading}
-          >
-            {rzpLoading
-              ? "Starting secure checkout…"
-              : effectiveMethod === "upi"
-              ? `${frequency === "monthly" ? "Set up " : "Pay "}₹${fmt(amount || 0)}${frequency === "monthly" ? " / month" : ""} via UPI`
-              : `Donate ₹${fmt(amount || 0)} via Razorpay`}
-          </button>
+          {isAppMethod(effectiveMethod) ? (
+            <a
+              className="btn btn--primary btn--lg btn--block"
+              href={amount ? upiAppLink(effectiveMethod, amount, noteFor(frequency)) : undefined}
+              onClick={(e) => {
+                if (!amount) { e.preventDefault(); return; }
+                setIosFailedApp(null);
+                setTimeout(() => {
+                  if (document.visibilityState !== "hidden") setIosFailedApp(effectiveMethod);
+                }, 2000);
+              }}
+            >
+              Pay ₹{fmt(amount || 0)} with {METHOD_LABELS[effectiveMethod]}
+            </a>
+          ) : (
+            <button
+              type="button"
+              onClick={effectiveMethod === "upi" ? handlePay : triggerRazorpay}
+              className={`btn btn--primary btn--lg btn--block ${!amount || rzpLoading ? "is-disabled" : ""}`}
+              disabled={!amount || rzpLoading}
+            >
+              {rzpLoading
+                ? "Starting secure checkout…"
+                : effectiveMethod === "upi"
+                ? `${frequency === "monthly" ? "Set up " : "Pay "}₹${fmt(amount || 0)}${frequency === "monthly" ? " / month" : ""} via UPI`
+                : `Donate ₹${fmt(amount || 0)} via Razorpay`}
+            </button>
+          )}
           <p className="hint">
-            {effectiveMethod === "upi"
+            {isAppMethod(effectiveMethod)
+              ? `Opens ${METHOD_LABELS[effectiveMethod]} with the amount filled in. If it doesn't open, use UPI / QR or Razorpay.`
+              : effectiveMethod === "upi"
               ? "Tap pay to show a QR you can scan with any UPI app, or open the UPI app directly."
               : "Razorpay opens a secure checkout — pay by card, UPI, netbanking or wallet. Works on iPhone."}
           </p>
+          {iosFailedApp && isAppMethod(effectiveMethod) && (
+            <p className="hint" style={{ color: "var(--ink-soft)" }}>
+              Didn't open? Scan the QR below or copy the UPI ID instead.
+            </p>
+          )}
           {frequency === "monthly" && effectiveMethod === "upi" && (
             <p className="hint" style={{ color: "var(--green-600)", fontWeight: 600 }}>
               Monthly giving: approve a recurring UPI mandate in your app so your support reaches our elders every month. 🙏
