@@ -19,6 +19,8 @@ export const CONFIG = {
   taxExemption: "Donations are eligible for tax exemption u/s 80G of the Income Tax Act, 1961.",
   upiId: "rsfoundation@icici",
   upiPayeeName: "Ready To Serve Foundation",
+  // Merchant category code — 8398 = charitable & social service organisations.
+  upiMerchantCode: "8398",
   bank: { accountName: "M/s. Ready To Serve Foundation", accountNumber: "030405003401", ifsc: "ICIC0000304", bankName: "ICICI Bank", branch: "Vanasthalipuram" },
   cardDonateUrl: "",
   // ─────────────────────────────────────────────────────────────────────
@@ -64,8 +66,14 @@ export function fmt(n) {
 // fail to decode %40 and reject the payment.
 export function upiQuery(amount, note) {
   const enc = (s) => encodeURIComponent(String(s)).replace(/%40/g, "@");
-  const tn = (note || ("Donation to " + CONFIG.orgName)).slice(0, 50);
-  let q = `pa=${enc(CONFIG.upiId)}&pn=${enc(CONFIG.upiPayeeName || CONFIG.orgName)}&tn=${enc(tn)}`;
+  // Merchant (P2M) VPAs like rsfoundation@icici are declined by UPI apps unless the
+  // request carries a merchant category code and a unique transaction reference.
+  const tn = (note || ("Donation to " + CONFIG.orgName))
+    .replace(/[^a-zA-Z0-9 .-]/g, " ")
+    .slice(0, 50)
+    .trim();
+  const tr = "RTSF" + Date.now().toString(36).toUpperCase();
+  let q = `pa=${enc(CONFIG.upiId)}&pn=${enc(CONFIG.upiPayeeName || CONFIG.orgName)}&tn=${enc(tn)}&tr=${tr}&mc=${CONFIG.upiMerchantCode}&mode=02&purpose=00`;
   if (amount && amount > 0) {
     const a = Number(amount);
     if (!isNaN(a) && a > 0) q += `&am=${a.toFixed(2).replace(/\.00$/, "")}`;

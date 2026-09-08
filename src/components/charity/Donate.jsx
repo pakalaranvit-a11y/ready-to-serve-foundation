@@ -33,7 +33,7 @@ export default function Donate() {
   const [qrUrl, setQrUrl] = useState("");
   const [qrError, setQrError] = useState(false);
   const inputRef = useRef(null);
-  const [payMethod, setPayMethod] = useState(() => (CONFIG.razorpay?.keyId ? "razorpay" : "upi"));
+  const [payMethod, setPayMethod] = useState("upi");
   const [rzpLoading, setRzpLoading] = useState(false);
   const [paid, setPaid] = useState(false);
   const [recorded, setRecorded] = useState(false);
@@ -131,10 +131,10 @@ export default function Donate() {
   };
 
   const methods = useMemo(() => [
-    ...(CONFIG.razorpay?.keyId ? ["razorpay"] : []),
     "upi",
+    ...(CONFIG.razorpay?.keyId ? ["razorpay"] : []),
   ], []);
-  const effectiveMethod = methods.includes(payMethod) ? payMethod : methods[0];
+  const effectiveMethod = methods.includes(payMethod) ? payMethod : "upi";
 
   // Load Razorpay Checkout SDK once.
   useEffect(() => {
