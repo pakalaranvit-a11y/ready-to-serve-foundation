@@ -131,10 +131,10 @@ export default function Donate() {
   };
 
   const methods = useMemo(() => [
-    "upi",
     ...(CONFIG.razorpay?.keyId ? ["razorpay"] : []),
+    "upi",
   ], []);
-  const effectiveMethod = methods.includes(payMethod) ? payMethod : "upi";
+  const effectiveMethod = methods.includes(payMethod) ? payMethod : methods[0];
 
   // Load Razorpay Checkout SDK once.
   useEffect(() => {
