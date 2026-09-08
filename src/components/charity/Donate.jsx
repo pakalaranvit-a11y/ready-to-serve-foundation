@@ -175,6 +175,22 @@ export default function Donate() {
         prefill: { name: anonymous ? "" : donorName },
         notes: { frequency, source: "rtsf_app" },
         theme: { color: "#0f5132" },
+        method: { upi: true, card: true, netbanking: true, wallet: true },
+        config: {
+          display: {
+            blocks: {
+              upiapps: {
+                name: "Pay using UPI",
+                instruments: [
+                  { method: "upi", flows: ["intent"], apps: ["google_pay", "phonepe", "paytm"] },
+                  { method: "upi", flows: ["collect", "qr"] },
+                ],
+              },
+            },
+            sequence: ["block.upiapps", "block.runtime"],
+            preferences: { show_default_blocks: true },
+          },
+        },
         handler: () => {
           toast({ title: "Payment successful 🙏", description: `₹${fmt(amount)} received via Razorpay.` });
           setPaid(true);
