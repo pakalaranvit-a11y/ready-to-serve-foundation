@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { CONFIG, fmt, upiLink, upiAppLink } from "@/lib/charityConfig";
 import BankTransferPanel from "@/components/charity/BankTransferPanel";
+import CardCheckout from "@/components/charity/CardCheckout";
 
 const noteFor = (frequency) =>
   frequency === "monthly" ? `Monthly donation to ${CONFIG.orgName}` : `Donation to ${CONFIG.orgName}`;
@@ -373,6 +374,13 @@ export default function Donate() {
 
           {effectiveMethod === "bank" ? (
             <BankTransferPanel amount={amount} donorName={anonymous ? "" : donorName} />
+          ) : effectiveMethod === "card" ? (
+            <CardCheckout
+              amount={amount}
+              donorName={anonymous ? "" : donorName}
+              frequency={frequency}
+              onPaid={() => setPaid(true)}
+            />
           ) : isAppMethod(effectiveMethod) ? (
             <a
               className="btn btn--primary btn--lg btn--block"

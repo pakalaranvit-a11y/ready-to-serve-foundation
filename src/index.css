@@ -422,6 +422,15 @@
 .bank-panel__form { margin-top:1.2rem; padding-top:1.2rem; border-top:1px dashed var(--line); }
 .bank-panel__form h4 { font-family:var(--font-head); font-size:1.1rem; margin-bottom:.7rem; }
 
+/* Inline card checkout (dropdown) */
+.card-checkout { margin-top:.4rem; }
+.card-checkout__toggle { display:flex; align-items:center; justify-content:space-between; gap:.6rem; width:100%; padding:1em 1.2em; border-radius:14px; border:0; cursor:pointer; font-family:inherit; font-weight:700; font-size:1.02rem; color:#fff; background:linear-gradient(135deg,var(--green-600),var(--green-500)); box-shadow:var(--shadow-sm); transition:transform .2s,box-shadow .2s; }
+.card-checkout__toggle:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 14px 30px -10px rgba(11,61,46,.5); }
+.card-checkout__toggle:disabled { opacity:.6; cursor:not-allowed; }
+.card-checkout__body { margin-top:.8rem; border:1.5px solid var(--line); border-radius:14px; padding:.9rem; background:var(--cream); }
+.card-checkout__frame { width:100%; min-height:420px; border-radius:12px; overflow:hidden; background:#fff; }
+.card-checkout__frame iframe { width:100%!important; min-height:420px; border:0; display:block; }
+
 /* UPI app quick-pay buttons */
 .upi-apps { margin-top:.4rem; }
 .upi-apps__row { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
