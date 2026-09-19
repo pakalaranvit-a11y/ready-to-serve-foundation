@@ -11,6 +11,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { CONFIG, fmt, upiLink, upiAppLink } from "@/lib/charityConfig";
+import BankTransferPanel from "@/components/charity/BankTransferPanel";
 
 const noteFor = (frequency) =>
   frequency === "monthly" ? `Monthly donation to ${CONFIG.orgName}` : `Donation to ${CONFIG.orgName}`;
@@ -134,9 +135,18 @@ export default function Donate() {
     "gpay",
     "phonepe",
     "paytm",
-    ...(CONFIG.razorpay?.keyId ? ["razorpay"] : []),
+    ...(CONFIG.razorpay?.keyId ? ["card", "razorpay"] : []),
+    "bank",
   ], []);
-  const METHOD_LABELS = { upi: "UPI / QR", gpay: "GPay", phonepe: "PhonePe", paytm: "Paytm", razorpay: "Razorpay" };
+  const METHOD_LABELS = {
+    upi: "UPI / QR",
+    gpay: "GPay",
+    phonepe: "PhonePe",
+    paytm: "Paytm",
+    card: "Credit / debit card",
+    razorpay: "Razorpay",
+    bank: "Bank transfer",
+  };
   const isAppMethod = (m) => ["gpay", "phonepe", "paytm"].includes(m);
   const effectiveMethod = methods.includes(payMethod) ? payMethod : "upi";
 
@@ -151,7 +161,7 @@ export default function Donate() {
     document.body.appendChild(s);
   }, []);
 
-  const triggerRazorpay = async () => {
+  const triggerRazorpay = async (only) => {
     if (!CONFIG.razorpay?.keyId) {
       toast({ title: "Razorpay not configured yet", description: "Add your Razorpay key in config.", variant: "destructive" });
       return;
@@ -175,8 +185,18 @@ export default function Donate() {
         prefill: { name: anonymous ? "" : donorName },
         notes: { frequency, source: "rtsf_app" },
         theme: { color: "#0f5132" },
-        method: { upi: true, card: true, netbanking: true, wallet: true },
-        config: {
+        method: only === "card"
+          ? { card: true, upi: false, netbanking: false, wallet: false, emi: false, paylater: false }
+          : { upi: true, card: true, netbanking: true, wallet: true },
+        config: only === "card" ? {
+          display: {
+            blocks: {
+              cards: { name: "Pay by credit / debit card", instruments: [{ method: "card" }] },
+            },
+            sequence: ["block.cards"],
+            preferences: { show_default_blocks: false },
+          },
+        } : {
           display: {
             blocks: {
               upiapps: {
@@ -337,7 +357,9 @@ export default function Donate() {
             </div>
           )}
 
-          {isAppMethod(effectiveMethod) ? (
+          {effectiveMethod === "bank" ? (
+            <BankTransferPanel amount={amount} donorName={anonymous ? "" : donorName} />
+          ) : isAppMethod(effectiveMethod) ? (
             <a
               className="btn btn--primary btn--lg btn--block"
               href={amount ? upiAppLink(effectiveMethod, amount, noteFor(frequency)) : undefined}
@@ -354,7 +376,11 @@ export default function Donate() {
           ) : (
             <button
               type="button"
-              onClick={effectiveMethod === "upi" ? handlePay : triggerRazorpay}
+              onClick={
+                effectiveMethod === "upi"
+                  ? handlePay
+                  : () => triggerRazorpay(effectiveMethod === "card" ? "card" : undefined)
+              }
               className={`btn btn--primary btn--lg btn--block ${!amount || rzpLoading ? "is-disabled" : ""}`}
               disabled={!amount || rzpLoading}
             >
@@ -362,16 +388,22 @@ export default function Donate() {
                 ? "Starting secure checkout…"
                 : effectiveMethod === "upi"
                 ? `${frequency === "monthly" ? "Set up " : "Pay "}₹${fmt(amount || 0)}${frequency === "monthly" ? " / month" : ""} via UPI`
+                : effectiveMethod === "card"
+                ? `Pay ₹${fmt(amount || 0)} by credit / debit card`
                 : `Donate ₹${fmt(amount || 0)} via Razorpay`}
             </button>
           )}
-          <p className="hint">
-            {isAppMethod(effectiveMethod)
-              ? `Opens ${METHOD_LABELS[effectiveMethod]} with the amount filled in. If it doesn't open, use UPI / QR or Razorpay.`
-              : effectiveMethod === "upi"
-              ? "Tap pay to show a QR you can scan with any UPI app, or open the UPI app directly."
-              : "Razorpay opens a secure checkout — pay by card, UPI, netbanking or wallet. Works on iPhone."}
-          </p>
+          {effectiveMethod !== "bank" && (
+            <p className="hint">
+              {isAppMethod(effectiveMethod)
+                ? `Opens ${METHOD_LABELS[effectiveMethod]} with the amount filled in. If it doesn't open, use UPI / QR or Razorpay.`
+                : effectiveMethod === "card"
+                ? "Secure card checkout — Visa, Mastercard, RuPay and Amex accepted."
+                : effectiveMethod === "upi"
+                ? "Tap pay to show a QR you can scan with any UPI app, or open the UPI app directly."
+                : "Razorpay opens a secure checkout — pay by card, UPI, netbanking or wallet. Works on iPhone."}
+            </p>
+          )}
           {iosFailedApp && isAppMethod(effectiveMethod) && (
             <p className="hint" style={{ color: "var(--ink-soft)" }}>
               Didn't open? Scan the QR below or copy the UPI ID instead.
@@ -382,13 +414,13 @@ export default function Donate() {
               Monthly giving: approve a recurring UPI mandate in your app so your support reaches our elders every month. 🙏
             </p>
           )}
-          {frequency === "monthly" && effectiveMethod !== "upi" && (
+          {frequency === "monthly" && !["upi", "bank"].includes(effectiveMethod) && (
             <p className="hint" style={{ color: "var(--ink-soft)" }}>
               Note: this gateway processes a one-time payment. For monthly giving, use UPI and approve a recurring mandate.
             </p>
           )}
 
-          {isMobile && (
+          {isMobile && effectiveMethod !== "bank" && (
             <div className="upi-apps">
               <p className="hint" style={{ marginBottom: ".5rem" }}>Or pay directly with an app:</p>
               <div className="upi-apps__row">
@@ -462,26 +494,6 @@ export default function Donate() {
             <a className="btn btn--ghost btn--block" href={CONFIG.cardDonateUrl} target="_blank" rel="noopener">
               Donate by debit / credit card
             </a>
-          )}
-
-          {CONFIG.bank.accountNumber && CONFIG.bank.ifsc && (
-            <div className="bank">
-              <p className="bank__title">Bank transfer (NEFT / IMPS) — {CONFIG.bank.bankName}</p>
-              <dl className="bank__list">
-                {[
-                  ["Account name", CONFIG.bank.accountName],
-                  ["Account no.", CONFIG.bank.accountNumber],
-                  ["IFSC", CONFIG.bank.ifsc],
-                  ["Bank", CONFIG.bank.bankName],
-                  ["Branch", CONFIG.bank.branch],
-                ].filter(([, v]) => v).map(([k, v]) => (
-                  <React.Fragment key={k}>
-                    <dt>{k}</dt>
-                    <dd>{v}</dd>
-                  </React.Fragment>
-                ))}
-              </dl>
-            </div>
           )}
 
           <p className="card__foot">{CONFIG.taxExemption}<br />A receipt can be issued on request. Thank you for serving with us. 🙏</p>

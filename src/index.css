@@ -415,6 +415,13 @@
 .nav.is-scrolled .nav__social a { color:var(--ink-soft); }
 .nav.is-scrolled .nav__social a:hover { color:var(--green-600); }
 
+/* Bank transfer panel */
+.bank-panel { margin-top:.4rem; }
+.bank-panel__lead { font-size:.92rem; color:var(--ink-soft); margin:0 0 .9rem; }
+.bank-panel__rows { display:grid; gap:.5rem; }
+.bank-panel__form { margin-top:1.2rem; padding-top:1.2rem; border-top:1px dashed var(--line); }
+.bank-panel__form h4 { font-family:var(--font-head); font-size:1.1rem; margin-bottom:.7rem; }
+
 /* UPI app quick-pay buttons */
 .upi-apps { margin-top:.4rem; }
 .upi-apps__row { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
