@@ -13,15 +13,12 @@ export default function CardCheckout({ amount, donorName, frequency, onPaid }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
-  const [phone, setPhone] = useState("");
-  const phoneRef = useRef("");
   const containerRef = useRef(null);
   const rzpRef = useRef(null);
 
   useEffect(() => () => { try { rzpRef.current?.close?.(); } catch {} }, []);
 
   const start = async () => {
-    phoneRef.current = phone;
     if (!open) setOpen(true);
     if (!amount) return;
     if (!window.Razorpay) {
@@ -41,12 +38,11 @@ export default function CardCheckout({ amount, donorName, frequency, onPaid }) {
         currency: "INR",
         name: CONFIG.orgName,
         description: frequency === "monthly" ? "Monthly donation" : "Donation",
-        prefill: {
-          name: donorName || "",
-          // Any country's number is accepted — we pass it through with its code
-          // so Razorpay never asks for an Indian mobile number.
-          contact: (phoneRef.current || "").replace(/[^\d+]/g, ""),
-        },
+        prefill: { name: donorName || "", contact: "", email: "" },
+        // No phone number at all — the contact/email fields are hidden so nobody
+        // is ever asked for a number.
+        hidden: { contact: true, email: true },
+        readonly: { contact: true, email: true },
         notes: { source: "rtsf_app_card" },
         theme: { color: "#0f5132" },
         parent: "#rzp-card-embed",
@@ -111,16 +107,6 @@ export default function CardCheckout({ amount, donorName, frequency, onPaid }) {
           <p className="hint" style={{ textAlign: "left", margin: "0 0 .6rem" }}>
             Visa, Mastercard, RuPay and Amex — Indian or international cards welcome.
           </p>
-          <label className="field">
-            <input
-              type="tel"
-              inputMode="tel"
-              placeholder="Phone number (any country, e.g. +1 415 555 0123)"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              maxLength={20}
-            />
-          </label>
           <div id="rzp-card-embed" ref={containerRef} className="card-checkout__frame" />
           {!done && (
             <button type="button" className="btn btn--primary btn--block" onClick={start} disabled={loading || !amount}>
