@@ -30,7 +30,7 @@ export default async function(req) {
     if (!res.ok) {
       return Response.json({ error: data?.error?.description || "Razorpay order failed" }, { status: 502 });
     }
-    return Response.json({ order_id: data.id, amount: data.amount, currency: data.currency });
+    return Response.json({ order_id: data.id, amount: data.amount, currency: data.currency, key_id: keyId });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }

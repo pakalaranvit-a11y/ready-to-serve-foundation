@@ -176,7 +176,7 @@ export default function Donate() {
       const orderId = res?.data?.order_id;
       if (!orderId) throw new Error("No order id returned");
       const rzp = new window.Razorpay({
-        key: CONFIG.razorpay.keyId,
+        key: res?.data?.key_id || CONFIG.razorpay.keyId,
         amount: (amount || 0) * 100,
         currency: "INR",
         name: CONFIG.orgName,
@@ -211,9 +211,23 @@ export default function Donate() {
             preferences: { show_default_blocks: true },
           },
         },
-        handler: () => {
-          toast({ title: "Payment successful 🙏", description: `₹${fmt(amount)} received via Razorpay.` });
-          setPaid(true);
+        handler: async (response) => {
+          try {
+            const v = await base44.functions.invoke("verifyRazorpayPayment", {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+            if (!v?.data?.verified) throw new Error("not verified");
+            toast({ title: "Payment successful 🙏", description: `₹${fmt(amount)} received — thank you!` });
+            setPaid(true);
+          } catch {
+            toast({
+              title: "We couldn't verify the payment",
+              description: "If money left your account, please contact us with your payment ID.",
+              variant: "destructive",
+            });
+          }
         },
       });
       rzp.open();
@@ -398,7 +412,7 @@ export default function Donate() {
               {isAppMethod(effectiveMethod)
                 ? `Opens ${METHOD_LABELS[effectiveMethod]} with the amount filled in. If it doesn't open, use UPI / QR or Razorpay.`
                 : effectiveMethod === "card"
-                ? "Secure card checkout — Visa, Mastercard, RuPay and Amex accepted."
+                ? "Secure card checkout — Visa, Mastercard, RuPay and Amex, Indian or international. No Indian phone number needed: enter your own number with its country code."
                 : effectiveMethod === "upi"
                 ? "Tap pay to show a QR you can scan with any UPI app, or open the UPI app directly."
                 : "Razorpay opens a secure checkout — pay by card, UPI, netbanking or wallet. Works on iPhone."}
