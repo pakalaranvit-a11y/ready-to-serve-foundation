@@ -13,12 +13,15 @@ export default function CardCheckout({ amount, donorName, frequency, onPaid }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [phone, setPhone] = useState("");
+  const phoneRef = useRef("");
   const containerRef = useRef(null);
   const rzpRef = useRef(null);
 
   useEffect(() => () => { try { rzpRef.current?.close?.(); } catch {} }, []);
 
   const start = async () => {
+    phoneRef.current = phone;
     if (!open) setOpen(true);
     if (!amount) return;
     if (!window.Razorpay) {
@@ -38,7 +41,12 @@ export default function CardCheckout({ amount, donorName, frequency, onPaid }) {
         currency: "INR",
         name: CONFIG.orgName,
         description: frequency === "monthly" ? "Monthly donation" : "Donation",
-        prefill: { name: donorName || "" },
+        prefill: {
+          name: donorName || "",
+          // Any country's number is accepted — we pass it through with its code
+          // so Razorpay never asks for an Indian mobile number.
+          contact: (phoneRef.current || "").replace(/[^\d+]/g, ""),
+        },
         notes: { source: "rtsf_app_card" },
         theme: { color: "#0f5132" },
         parent: "#rzp-card-embed",
@@ -84,7 +92,7 @@ export default function CardCheckout({ amount, donorName, frequency, onPaid }) {
       <button
         type="button"
         className="card-checkout__toggle"
-        onClick={() => (open ? setOpen(false) : start())}
+        onClick={() => setOpen((o) => !o)}
         disabled={!amount || loading}
         aria-expanded={open}
       >
@@ -101,13 +109,22 @@ export default function CardCheckout({ amount, donorName, frequency, onPaid }) {
       {open && (
         <div className="card-checkout__body">
           <p className="hint" style={{ textAlign: "left", margin: "0 0 .6rem" }}>
-            Enter your card details below — Visa, Mastercard, RuPay and Amex, Indian or international. Any phone number works;
-            include your country code.
+            Visa, Mastercard, RuPay and Amex — Indian or international cards welcome.
           </p>
+          <label className="field">
+            <input
+              type="tel"
+              inputMode="tel"
+              placeholder="Phone number (any country, e.g. +1 415 555 0123)"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              maxLength={20}
+            />
+          </label>
           <div id="rzp-card-embed" ref={containerRef} className="card-checkout__frame" />
           {!done && (
-            <button type="button" className="btn btn--ghost btn--sm btn--block" onClick={start} disabled={loading}>
-              {loading ? "Loading…" : "Reload card form"}
+            <button type="button" className="btn btn--primary btn--block" onClick={start} disabled={loading || !amount}>
+              {loading ? "Loading…" : "Continue to secure card form"}
             </button>
           )}
         </div>
