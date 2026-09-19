@@ -420,7 +420,7 @@ export default function Donate() {
               {isAppMethod(effectiveMethod)
                 ? `Opens ${METHOD_LABELS[effectiveMethod]} with the amount filled in. If it doesn't open, use UPI / QR or Razorpay.`
                 : effectiveMethod === "card"
-                ? "Secure card checkout — Visa, Mastercard, RuPay and Amex, Indian or international. No Indian phone number needed: enter your own number with its country code."
+                ? "Secure card checkout — Visa, Mastercard, RuPay and Amex, Indian or international. No phone number required at all — just your card."
                 : effectiveMethod === "upi"
                 ? "Tap pay to show a QR you can scan with any UPI app, or open the UPI app directly."
                 : "Razorpay opens a secure checkout — pay by card, UPI, netbanking or wallet. Works on iPhone."}
