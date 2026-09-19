@@ -38,9 +38,13 @@ export default function CardCheckout({ amount, donorName, frequency, onPaid }) {
         currency: "INR",
         name: CONFIG.orgName,
         description: frequency === "monthly" ? "Monthly donation" : "Donation",
-        prefill: { name: donorName || "", contact: "", email: "" },
-        // No phone number at all — the contact/email fields are hidden so nobody
-        // is ever asked for a number.
+        // Donors never see or type a phone number: we prefill the foundation's own
+        // contact details and hide those fields entirely.
+        prefill: {
+          name: donorName || "",
+          contact: (CONFIG.phone || "").replace(/[^\d+]/g, ""),
+          email: CONFIG.email || "",
+        },
         hidden: { contact: true, email: true },
         readonly: { contact: true, email: true },
         notes: { source: "rtsf_app_card" },
