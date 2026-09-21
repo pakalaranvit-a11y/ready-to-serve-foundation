@@ -382,19 +382,29 @@ export default function Donate() {
               onPaid={() => setPaid(true)}
             />
           ) : isAppMethod(effectiveMethod) ? (
-            <a
+            <button
+              type="button"
               className="btn btn--primary btn--lg btn--block"
-              href={amount ? upiAppLink(effectiveMethod, amount, noteFor(frequency)) : undefined}
-              onClick={(e) => {
-                if (!amount) { e.preventDefault(); return; }
+              disabled={!amount}
+              onClick={() => {
+                if (!amount) return;
+                // No UPI app exists on a laptop — go straight to the scannable QR.
+                if (!isMobile) { setShowPay(true); return; }
                 setIosFailedApp(null);
+                window.location.href = upiAppLink(effectiveMethod, amount, noteFor(frequency));
+                // If the app never opened (not installed), fall back to the QR.
                 setTimeout(() => {
-                  if (document.visibilityState !== "hidden") setIosFailedApp(effectiveMethod);
+                  if (document.visibilityState !== "hidden") {
+                    setIosFailedApp(effectiveMethod);
+                    setShowPay(true);
+                  }
                 }, 2000);
               }}
             >
-              Pay ₹{fmt(amount || 0)} with {METHOD_LABELS[effectiveMethod]}
-            </a>
+              {isMobile
+                ? `Pay ₹${fmt(amount || 0)} with ${METHOD_LABELS[effectiveMethod]}`
+                : `Show QR to pay ₹${fmt(amount || 0)} with ${METHOD_LABELS[effectiveMethod]}`}
+            </button>
           ) : (
             <button
               type="button"
@@ -418,7 +428,9 @@ export default function Donate() {
           {effectiveMethod !== "bank" && (
             <p className="hint">
               {isAppMethod(effectiveMethod)
-                ? `Opens ${METHOD_LABELS[effectiveMethod]} with the amount filled in. If it doesn't open, use UPI / QR or Razorpay.`
+                ? isMobile
+                  ? `Opens ${METHOD_LABELS[effectiveMethod]} on this phone with the amount filled in. If it isn't installed, we'll show a QR instead.`
+                  : `${METHOD_LABELS[effectiveMethod]} only opens on a phone. On a laptop, scan the QR with ${METHOD_LABELS[effectiveMethod]} on your phone.`
                 : effectiveMethod === "card"
                 ? "Secure card checkout — Visa, Mastercard, RuPay and Amex, Indian or international. No phone number required at all — just your card."
                 : effectiveMethod === "upi"
@@ -556,10 +568,12 @@ export default function Donate() {
             </button>
             {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
             <div className="flex flex-col gap-2 w-full">
+              {isMobile && (
               <p className="text-xs text-center" style={{ color: "var(--ink-soft)" }}>
                 Or pay with an app — details filled in for you:
               </p>
-              {PAY_APPS.map((app) => (
+              )}
+              {isMobile && PAY_APPS.map((app) => (
                 <a
                   key={app.id}
                   className="btn btn--primary btn--block"
