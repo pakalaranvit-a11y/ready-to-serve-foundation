@@ -91,6 +91,12 @@ export function upiLink(amount, note) {
 // payment details prefilled. (Schemes per shambu2k/upi-intent registry.)
 export function upiAppLink(appId, amount, note) {
   const q = upiQuery(amount, note);
+  // On Android the system UPI intent is far more reliable than each app's own
+  // scheme (PhonePe in particular often ignores phonepe://pay), so let Android
+  // show its UPI app chooser instead.
+  if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent || "")) {
+    return `upi://pay?${q}`;
+  }
   const map = {
     gpay: `gpay://upi/pay?${q}`,
     phonepe: `phonepe://pay?${q}`,
