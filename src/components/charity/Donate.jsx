@@ -394,7 +394,8 @@ export default function Donate() {
                 window.location.href = upiAppLink(effectiveMethod, amount, noteFor(frequency));
                 // If the app never opened (not installed), fall back to the QR.
                 setTimeout(() => {
-                  if (document.visibilityState !== "hidden") {
+                  // Android's "Pay with…" chooser takes focus without hiding the page.
+                  if (document.visibilityState !== "hidden" && document.hasFocus()) {
                     setIosFailedApp(effectiveMethod);
                     setShowPay(true);
                   }
@@ -445,12 +446,12 @@ export default function Donate() {
           )}
           {frequency === "monthly" && effectiveMethod === "upi" && (
             <p className="hint" style={{ color: "var(--green-600)", fontWeight: 600 }}>
-              Monthly giving: approve a recurring UPI mandate in your app so your support reaches our elders every month. 🙏
+              Monthly giving: UPI sends this month's gift now — please return each month to give again. 🙏
             </p>
           )}
           {frequency === "monthly" && !["upi", "bank"].includes(effectiveMethod) && (
             <p className="hint" style={{ color: "var(--ink-soft)" }}>
-              Note: this gateway processes a one-time payment. For monthly giving, use UPI and approve a recurring mandate.
+              Note: this processes this month's gift as a one-time payment.
             </p>
           )}
 
@@ -472,8 +473,8 @@ export default function Donate() {
           <div className="recog">
             <h4>Your details for our donor wall</h4>
             <p>
-              {effectiveMethod === "razorpay"
-                ? "Enter your name. The button below unlocks only after your Razorpay payment is confirmed — then you can add yourself to the wall once."
+              {effectiveMethod === "razorpay" || effectiveMethod === "card"
+                ? "Enter your name. The button below unlocks only after your payment is confirmed — then you can add yourself to the wall once."
                 : "Enter your name. For UPI, our team adds you to the donor wall after manually confirming your transfer."}
             </p>
             <label className="field">
@@ -581,7 +582,7 @@ export default function Donate() {
                   onClick={() => {
                     setIosFailedApp(null);
                     setTimeout(() => {
-                      if (document.visibilityState !== "hidden") setIosFailedApp(app.id);
+                      if (document.visibilityState !== "hidden" && document.hasFocus()) setIosFailedApp(app.id);
                     }, 2000);
                   }}
                 >
