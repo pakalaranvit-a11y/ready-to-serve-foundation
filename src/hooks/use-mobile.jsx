@@ -17,3 +17,19 @@ export function useIsMobile() {
 
   return !!isMobile
 }
+
+// True while the on-screen keyboard is open (visual viewport shrinks well below the layout viewport).
+export function useIsKeyboardActive() {
+  const [active, setActive] = React.useState(false)
+
+  React.useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv) return
+    const onResize = () => setActive(window.innerHeight - vv.height > 150)
+    vv.addEventListener("resize", onResize)
+    onResize()
+    return () => vv.removeEventListener("resize", onResize)
+  }, [])
+
+  return active
+}

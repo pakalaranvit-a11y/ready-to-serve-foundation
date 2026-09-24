@@ -61,7 +61,11 @@ export default function PullToRefresh({ children }) {
     >
       <div
         className="ptr__indicator"
-        style={{ height: pull, transition: pulling ? "none" : "height .2s ease" }}
+        style={{
+          transform: `translate3d(0, ${pull}px, 0)`,
+          opacity: pull > 0 ? 1 : 0,
+          transition: pulling ? "none" : "transform .2s ease, opacity .2s ease",
+        }}
         aria-hidden="true"
       >
         <span className={`ptr__icon ${refreshing ? "is-spinning" : ""}`}>⟳</span>

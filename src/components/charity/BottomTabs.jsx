@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home as HomeIcon, Heart, Users, Settings as SettingsIcon } from "lucide-react";
+import { useIsKeyboardActive } from "@/hooks/use-mobile";
 
 const TABS = [
   { key: "home", label: "Home", path: "/", icon: HomeIcon },
@@ -36,6 +37,9 @@ export default function BottomTabs() {
     sessionStorage.setItem(storageKey(currentTab), location.pathname);
     setLastPaths((prev) => (prev[currentTab] === location.pathname ? prev : { ...prev, [currentTab]: location.pathname }));
   }, [currentTab, location.pathname]);
+
+  const keyboardActive = useIsKeyboardActive();
+  if (keyboardActive) return null;
 
   return (
     <nav className="bottom-tabs" aria-label="Mobile navigation">
