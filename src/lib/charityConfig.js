@@ -23,14 +23,9 @@ export const CONFIG = {
   upiMerchantCode: "8398",
   bank: { accountName: "M/s. Ready To Serve Foundation", accountNumber: "030405003401", ifsc: "ICIC0000304", bankName: "ICICI Bank", branch: "Vanasthalipuram" },
   cardDonateUrl: "",
-  // ─────────────────────────────────────────────────────────────────────
-  // RAZORPAY — Standard Checkout (key ID here, secret kept server-side)
-  // ─────────────────────────────────────────────────────────────────────
-  // `keyId` is the PUBLIC key ID (rzp_test_... or rzp_live_...) — safe in the app.
-  // The Key Secret is stored as app secrets (RAZORPAY_KEY_SECRET) and used only
-  // by the `createRazorpayOrder` backend function to create the order.
-  // For real donations, switch keyId to your rzp_live_... key + live secret.
-  razorpay: { keyId: "rzp_test_TTNK8VJyawo4il" },
+  // PAYPAL — paste your PayPal Donate button link here, e.g.
+  // "https://www.paypal.com/donate/?hosted_button_id=XXXXXXXX"  (or a https://paypal.me/yourname link)
+  paypal: { donateUrl: "" },
   foundedYear: 2011,
   membersStart: 5,
   membersNow: 100,

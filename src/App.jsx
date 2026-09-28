@@ -76,6 +76,21 @@ const AuthenticatedApp = () => {
 };
 
 function App() {
+  // External links (Instagram, Facebook, PayPal…) must always open, even inside the
+  // mobile app shell where target="_blank" is sometimes silently blocked.
+  useEffect(() => {
+    const onClick = (e) => {
+      const a = e.target.closest?.('a[target="_blank"]');
+      if (!a || !a.href || a.origin === window.location.origin) return;
+      e.preventDefault();
+      const w = window.open(a.href, "_blank");
+      if (w) w.opener = null;
+      else window.location.href = a.href;
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const apply = (e) => document.documentElement.classList.toggle("dark", e.matches);
