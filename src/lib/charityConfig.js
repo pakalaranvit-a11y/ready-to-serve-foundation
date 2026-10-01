@@ -25,7 +25,11 @@ export const CONFIG = {
   cardDonateUrl: "",
   // PAYPAL — paste your PayPal Donate button link here, e.g.
   // "https://www.paypal.com/donate/?hosted_button_id=XXXXXXXX"  (or a https://paypal.me/yourname link)
-  paypal: { donateUrl: "" },
+  paypal: {
+    clientId: "BAAkLlq3IcTyIRxhwUtZmARB5nr24IdSISAl6kQPzboYoTVqLYTOkxDDGb31MbvglLvO3Y0NQFIeB-gypA",
+    // From PayPal's button code: paypal.HostedButtons({ hostedButtonId: "XXXX" })
+    hostedButtonId: "",
+  },
   foundedYear: 2011,
   membersStart: 5,
   membersNow: 100,
