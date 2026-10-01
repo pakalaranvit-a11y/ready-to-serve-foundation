@@ -28,7 +28,7 @@ export const CONFIG = {
   paypal: {
     clientId: "BAAkLlq3IcTyIRxhwUtZmARB5nr24IdSISAl6kQPzboYoTVqLYTOkxDDGb31MbvglLvO3Y0NQFIeB-gypA",
     // From PayPal's button code: paypal.HostedButtons({ hostedButtonId: "XXXX" })
-    hostedButtonId: "",
+    hostedButtonId: "BFG5MHU7NGRDC",
   },
   foundedYear: 2011,
   membersStart: 5,
