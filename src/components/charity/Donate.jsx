@@ -21,13 +21,13 @@ const PAY_APPS = [
   { id: "paytm", label: "Paytm", store: "https://apps.apple.com/in/app/paytm-secure-upi-payments/id473941634" },
 ];
 
-const METHODS = ["upi", "gpay", "phonepe", "paytm", "paypal", "bank"];
+const METHODS = ["upi", "paypal", "gpay", "phonepe", "paytm", "bank"];
 const METHOD_LABELS = {
   upi: "UPI / QR",
   gpay: "GPay",
   phonepe: "PhonePe",
   paytm: "Paytm",
-  paypal: "PayPal / Wallet / Card",
+  paypal: "Credit / Debit card",
   bank: "Bank transfer",
 };
 const isAppMethod = (m) => ["gpay", "phonepe", "paytm"].includes(m);
