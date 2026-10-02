@@ -16,6 +16,12 @@ import DonorsPage from "@/pages/Donors";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Support from "@/pages/Support";
 import Settings from "@/pages/Settings";
+import ImpactPage from "@/pages/ImpactPage";
+import StoriesPage from "@/pages/StoriesPage";
+import More from "@/pages/More";
+import MyGiving from "@/pages/MyGiving";
+import About from "@/pages/About";
+import Terms from "@/pages/Terms";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import ForgotPassword from "@/pages/ForgotPassword";
@@ -35,6 +41,12 @@ const AnimatedRoutes = () => {
         <Route path="/privacy-policy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
         <Route path="/support" element={<PageTransition><Support /></PageTransition>} />
         <Route path="/settings" element={<PageTransition><Settings /></PageTransition>} />
+        <Route path="/impact" element={<PageTransition><ImpactPage /></PageTransition>} />
+        <Route path="/stories" element={<PageTransition><StoriesPage /></PageTransition>} />
+        <Route path="/more" element={<PageTransition><More /></PageTransition>} />
+        <Route path="/my-giving" element={<PageTransition><MyGiving /></PageTransition>} />
+        <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+        <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

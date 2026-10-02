@@ -6,6 +6,7 @@ const CHECKOUT_URL = "https://www.paypal.com/ncp/payment/BFG5MHU7NGRDC";
 export default function PayPalPanel() {
   return (
     <div className="bank-panel">
+      <p className="thanks-box" style={{ marginTop: 0 }}>Donations are processed securely by PayPal. You will receive a receipt by email.</p>
       <a className="btn btn--primary btn--lg btn--block" href={CHECKOUT_URL} target="_blank" rel="noopener">
         Checkout with card <span aria-hidden="true">→</span>
       </a>

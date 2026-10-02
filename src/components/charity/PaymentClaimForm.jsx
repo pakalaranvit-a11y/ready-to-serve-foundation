@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
 import { fmt } from "@/lib/charityConfig";
+import { addGift } from "@/lib/localGiving";
 
 // After paying by UPI / PayPal, donors send their details so the team can match the
 // payment in the bank / PayPal account and add them to the donor wall.
@@ -24,6 +25,7 @@ export default function PaymentClaimForm({ amount, method }) {
         reference: ref.trim(),
         message: `[${method}] ${msg.trim()}`,
       });
+      addGift({ amount, method });
       setDone(true);
       toast({ title: "Thank you! 🙏", description: `We'll confirm your ₹${fmt(amount)} gift and add you to the donor wall.` });
     } catch {

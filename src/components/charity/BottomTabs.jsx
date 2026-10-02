@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home as HomeIcon, Heart, Users, Settings as SettingsIcon } from "lucide-react";
+import { Home as HomeIcon, Heart, BarChart3, BookOpen, Menu } from "lucide-react";
 import { useIsKeyboardActive } from "@/hooks/use-mobile";
 
 const TABS = [
   { key: "home", label: "Home", path: "/", icon: HomeIcon },
+  { key: "impact", label: "Impact", path: "/impact", icon: BarChart3 },
+  { key: "stories", label: "Stories", path: "/stories", icon: BookOpen },
   { key: "donate", label: "Donate", path: "/donate", icon: Heart },
-  { key: "donors", label: "Donor Wall", path: "/donors", icon: Users },
-  { key: "settings", label: "Settings", path: "/settings", icon: SettingsIcon },
+  { key: "more", label: "More", path: "/more", icon: Menu },
 ];
 
 // Map any pathname to the tab that owns it (child routes resolve to their parent tab).
 function pathToTab(path) {
+  if (path === "/") return "home";
+  if (path === "/impact") return "impact";
+  if (path === "/stories") return "stories";
   if (path === "/donate") return "donate";
-  if (path === "/donors") return "donors";
-  if (path === "/settings" || path === "/support" || path === "/privacy" || path === "/privacy-policy") return "settings";
-  return "home";
+  return "more";
 }
 
 const storageKey = (key) => `last_tab_${key}`;
