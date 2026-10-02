@@ -1,4 +1,5 @@
 import React from "react";
+import { DONATE_URL, openDonate } from "@/lib/openDonate";
 
 export default function About() {
   return (
@@ -27,7 +28,7 @@ export default function About() {
             <li>Birthday celebrations so no elder feels forgotten</li>
             <li>Run by volunteers — donations reach the home, not overheads</li>
           </ul>
-          <a href="#donate" className="btn btn--primary">Help us keep the lights on</a>
+          <a href={DONATE_URL} onClick={openDonate} className="btn btn--primary">Help us keep the lights on</a>
         </div>
       </div>
     </section>

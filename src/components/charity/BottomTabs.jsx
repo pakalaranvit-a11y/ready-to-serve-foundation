@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home as HomeIcon, Heart, BarChart3, BookOpen, Menu } from "lucide-react";
 import { useIsKeyboardActive } from "@/hooks/use-mobile";
+import { DONATE_URL, openDonate } from "@/lib/openDonate";
 
 const TABS = [
   { key: "home", label: "Home", path: "/", icon: HomeIcon },
@@ -50,6 +51,14 @@ export default function BottomTabs() {
         const isActive = currentTab === tab.key;
         // Active tab resets to its root; inactive tabs restore their last sub-path.
         const target = isActive ? tab.path : (lastPaths[tab.key] || tab.path);
+        if (tab.key === "donate") {
+          return (
+            <a key={tab.key} href={DONATE_URL} onClick={openDonate} className="bottom-tab">
+              <Icon size={22} strokeWidth={1.8} />
+              <span>{tab.label}</span>
+            </a>
+          );
+        }
         return (
           <Link
             key={tab.key}

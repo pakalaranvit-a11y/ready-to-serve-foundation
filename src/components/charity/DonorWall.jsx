@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { DONATE_URL, openDonate } from "@/lib/openDonate";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { CONFIG, fmt } from "@/lib/charityConfig";
@@ -51,7 +52,7 @@ export default function DonorWall() {
         ) : donations.length === 0 ? (
           <div className="donorwall-empty" data-reveal="">
             <p>Be the first name on our donor wall — donate above and add your name to be recognised. 🙏</p>
-            <a href="#donate" className="btn btn--primary btn--sm">Donate now</a>
+            <a href={DONATE_URL} onClick={openDonate} className="btn btn--primary btn--sm">Donate now</a>
           </div>
         ) : (
           <div className="stories__grid">

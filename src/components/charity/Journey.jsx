@@ -1,4 +1,5 @@
 import React from "react";
+import { DONATE_URL, openDonate } from "@/lib/openDonate";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CONFIG } from "@/lib/charityConfig";
 
@@ -56,7 +57,7 @@ export default function Journey() {
               <p>
                 Many arrive frightened and alone. Within weeks you see the change: a smile at breakfast, a hand reaching for another's during evening prayer. <strong>This is what your donation buys — not just food, but family.</strong>
               </p>
-              <a href="#donate" className="btn btn--primary" style={{ marginTop: ".6rem" }}>Sponsor an elder</a>
+              <a href={DONATE_URL} onClick={openDonate} className="btn btn--primary" style={{ marginTop: ".6rem" }}>Sponsor an elder</a>
             </div>
           </TabsContent>
         </Tabs>

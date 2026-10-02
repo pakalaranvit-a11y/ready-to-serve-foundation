@@ -4,7 +4,6 @@ import Navbar from "@/components/charity/Navbar";
 import Hero from "@/components/charity/Hero";
 import About from "@/components/charity/About";
 import Impact from "@/components/charity/Impact";
-import Donate from "@/components/charity/Donate";
 import Stories from "@/components/charity/Stories";
 import NotableSupporters from "@/components/charity/NotableSupporters";
 import Videos from "@/components/charity/Videos";
@@ -29,7 +28,6 @@ export default function Home() {
           <About />
           <Journey />
           <Impact />
-          <Donate />
           <DonorWall />
           <Stories />
           <NotableSupporters />

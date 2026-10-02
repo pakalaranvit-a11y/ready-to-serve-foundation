@@ -1,4 +1,5 @@
 import React from "react";
+import { DONATE_URL, openDonate } from "@/lib/openDonate";
 import { Link } from "react-router-dom";
 import { LogoMark } from "@/components/charity/Logo";
 import { CONFIG } from "@/lib/charityConfig";
@@ -49,7 +50,7 @@ export default function Footer() {
         </div>
         <div className="footer__col">
           <h4>Give</h4>
-          <p><a href="#donate" className="link-strong">Donate by UPI →</a></p>
+          <p><a href={DONATE_URL} onClick={openDonate} className="link-strong">Donate →</a></p>
           {CONFIG.website && <p><a href={`https://${CONFIG.website}`} target="_blank" rel="noopener" className="link-strong">{CONFIG.website} ↗</a></p>}
           {CONFIG.societyRegNo && <p>Reg. No. {CONFIG.societyRegNo}</p>}
           {CONFIG.regNo && <p>{CONFIG.regNo}</p>}

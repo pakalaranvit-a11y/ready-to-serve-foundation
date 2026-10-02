@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { DONATE_URL, openDonate } from "@/lib/openDonate";
 import BackHeader from "@/components/charity/BackHeader";
 import { getGifts } from "@/lib/localGiving";
 import { fmt } from "@/lib/charityConfig";
@@ -23,7 +23,7 @@ export default function MyGiving() {
         {gifts.length === 0 ? (
           <div className="donorwall-empty">
             <p>No donations recorded on this device yet.</p>
-            <Link to="/donate" className="btn btn--primary">Make a donation</Link>
+            <a href={DONATE_URL} onClick={openDonate} className="btn btn--primary">Make a donation</a>
           </div>
         ) : (
           gifts.map((g, i) => (

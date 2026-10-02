@@ -1,28 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { DONATE_URL, openDonate } from "@/lib/openDonate";
 
-// Scrolls to the donate section when it's on the current page,
-// otherwise navigates to the dedicated donate page.
-export default function DonateNowButton({ className = "btn btn--primary btn--lg", children }) {
-  const navigate = useNavigate();
-
-  const handleClick = (e) => {
-    e.preventDefault();
-    const target = document.getElementById("donate");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      navigate("/donate");
-    }
-  };
-
+export default function DonateNowButton({ className = "btn btn--primary btn--lg", children, style }) {
   return (
-    <a href="#donate" onClick={handleClick} className={className}>
-      {children || (
-        <>
-          Donate now <span aria-hidden="true">→</span>
-        </>
-      )}
+    <a href={DONATE_URL} onClick={openDonate} className={className} style={style} rel="noopener">
+      {children || <>Donate Now <span aria-hidden="true">→</span></>}
     </a>
   );
 }

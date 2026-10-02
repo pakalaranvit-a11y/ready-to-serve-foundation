@@ -1,10 +1,9 @@
 import React from "react";
+import { openDonate } from "@/lib/openDonate";
 import { CONFIG, fmt } from "@/lib/charityConfig";
 
 export default function Impact() {
-  const scrollToDonate = () => {
-    document.getElementById("donate")?.scrollIntoView({ behavior: "smooth" });
-  };
+  const scrollToDonate = () => openDonate();
 
   return (
     <section className="section impact" id="impact">
