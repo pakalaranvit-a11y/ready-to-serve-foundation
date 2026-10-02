@@ -21,7 +21,7 @@ const PAY_APPS = [
   { id: "paytm", label: "Paytm", store: "https://apps.apple.com/in/app/paytm-secure-upi-payments/id473941634" },
 ];
 
-const METHODS = ["upi", "paypal", "gpay", "phonepe", "paytm", "bank"];
+const METHODS = ["paypal", "upi", "gpay", "phonepe", "paytm", "bank"];
 const METHOD_LABELS = {
   upi: "UPI / QR",
   gpay: "GPay",
@@ -41,7 +41,7 @@ export default function Donate() {
   const [qrUrl, setQrUrl] = useState("");
   const [qrError, setQrError] = useState(false);
   const inputRef = useRef(null);
-  const [payMethod, setPayMethod] = useState("upi");
+  const [payMethod, setPayMethod] = useState("paypal");
   const [iosFailedApp, setIosFailedApp] = useState(null);
 
   const { isAndroid, isMobile } = useMemo(() => {
