@@ -130,7 +130,7 @@ export default function Donate() {
           </div>
         </div>
 
-        <div className="card donate__card" data-reveal="">
+        <div className="card donate__card">
           <h3 className="card__title">Choose your gift</h3>
 
           <div className="seg" role="group" aria-label="Donation frequency">
