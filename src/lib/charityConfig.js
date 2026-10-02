@@ -71,8 +71,8 @@ export function upiQuery(amount, note) {
     .replace(/[^a-zA-Z0-9 .-]/g, " ")
     .slice(0, 50)
     .trim();
-  const tr = "RTSF" + Date.now().toString(36).toUpperCase();
-  let q = `pa=${enc(CONFIG.upiId)}&pn=${enc(CONFIG.upiPayeeName || CONFIG.orgName)}&tn=${enc(tn)}&tr=${tr}&mc=${CONFIG.upiMerchantCode}&mode=02&purpose=00`;
+  // Keep the link minimal: unsigned merchant fields (mc/tr/mode) make GPay reject the payment.
+  let q = `pa=${enc(CONFIG.upiId)}&pn=${enc(CONFIG.upiPayeeName || CONFIG.orgName)}&tn=${enc(tn)}`;
   if (amount && amount > 0) {
     const a = Number(amount);
     if (!isNaN(a) && a > 0) q += `&am=${a.toFixed(2).replace(/\.00$/, "")}`;
