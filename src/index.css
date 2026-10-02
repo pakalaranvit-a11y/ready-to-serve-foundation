@@ -412,8 +412,10 @@
 .nav__social { display:inline-flex; gap:.5rem; align-items:center; margin-left:.4rem; }
 .nav__social a { display:grid; place-items:center; width:32px; height:32px; border-radius:50%; color:inherit; transition:color .2s,transform .2s; }
 .nav__social a:hover { color:var(--gold-400); transform:translateY(-1px); }
-.nav.is-scrolled .nav__social a { color:var(--ink-soft); }
-.nav.is-scrolled .nav__social a:hover { color:var(--green-600); }
+.nav__social a { width:36px; height:36px; color:#fff !important; }
+.nav__social a[aria-label="Instagram"] { background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af); }
+.nav__social a[aria-label="Facebook"] { background:#1877f2; }
+.nav__social a[aria-label="YouTube"] { background:#ff0000; }
 
 /* Bank transfer panel */
 .bank-panel { margin-top:.4rem; }
