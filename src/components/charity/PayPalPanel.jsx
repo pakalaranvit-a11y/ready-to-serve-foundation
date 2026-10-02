@@ -8,7 +8,7 @@ export default function PayPalPanel() {
     <div className="bank-panel">
       <p className="thanks-box" style={{ marginTop: 0 }}>Donations are processed securely by PayPal. You will receive a receipt by email.</p>
       <a className="btn btn--primary btn--lg btn--block" href={CHECKOUT_URL} target="_blank" rel="noopener">
-        Checkout with card <span aria-hidden="true">→</span>
+        Pay with Card, PayPal or Venmo <span aria-hidden="true">→</span>
       </a>
       <p className="hint" style={{ fontWeight: 600 }}>
         Opens PayPal's secure checkout. Enter your amount, then tap <strong>"Debit or Credit Card"</strong> to type in your card details. No PayPal account is needed.

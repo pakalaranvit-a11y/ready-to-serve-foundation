@@ -27,7 +27,7 @@ const METHOD_LABELS = {
   gpay: "GPay",
   phonepe: "PhonePe",
   paytm: "Paytm",
-  paypal: "Credit / Debit card",
+  paypal: "Card / PayPal / Venmo",
   bank: "Bank transfer",
 };
 const isAppMethod = (m) => ["gpay", "phonepe", "paytm"].includes(m);
