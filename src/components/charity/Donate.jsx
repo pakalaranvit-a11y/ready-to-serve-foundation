@@ -23,7 +23,8 @@ const PAY_APPS = [
 
 // UPI app deep links are blocked by GPay/PhonePe/Paytm for this account, so UPI is
 // offered only as scan-the-QR / copy-the-UPI-ID, which works in every UPI app.
-const METHODS = ["paypal", "upi", "bank"];
+// UPI hidden: the bank reports rsfoundation@icici as "unavailable". Add "upi" back once ICICI fixes it.
+const METHODS = ["paypal", "bank"];
 const METHOD_LABELS = {
   upi: "UPI / QR",
   gpay: "GPay",
@@ -245,7 +246,7 @@ export default function Donate() {
 
           {method !== "bank" && <PaymentClaimForm amount={amount} method={METHOD_LABELS[method]} />}
 
-          <div className="qr-block">
+          {METHODS.includes("upi") && (<div className="qr-block">
             <div className="qr-block__code" aria-label="UPI QR code">
               {qrUrl ? (
                 <img src={qrUrl} alt="UPI QR code" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
@@ -262,7 +263,7 @@ export default function Donate() {
               </button>
               {copied && <p className="copied">Copied ✓</p>}
             </div>
-          </div>
+          </div>)}
 
           <p className="card__foot">{CONFIG.taxExemption}<br />A receipt can be issued on request. Thank you for serving with us. 🙏</p>
         </div>
