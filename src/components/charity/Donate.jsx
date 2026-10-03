@@ -21,7 +21,9 @@ const PAY_APPS = [
   { id: "paytm", label: "Paytm", store: "https://apps.apple.com/in/app/paytm-secure-upi-payments/id473941634" },
 ];
 
-const METHODS = ["paypal", "upi", "gpay", "phonepe", "paytm", "bank"];
+// UPI app deep links are blocked by GPay/PhonePe/Paytm for this account, so UPI is
+// offered only as scan-the-QR / copy-the-UPI-ID, which works in every UPI app.
+const METHODS = ["paypal", "upi", "bank"];
 const METHOD_LABELS = {
   upi: "UPI / QR",
   gpay: "GPay",
@@ -216,7 +218,7 @@ export default function Donate() {
                 ? isMobile
                   ? `Opens ${METHOD_LABELS[method]} on this phone with the amount filled in. If it isn't installed, we'll show a QR instead.`
                   : `${METHOD_LABELS[method]} only opens on a phone. On a laptop, scan the QR with ${METHOD_LABELS[method]} on your phone.`
-                : "Tap pay to show a QR you can scan with any UPI app, or open the UPI app directly."}
+                : "Shows a QR and UPI ID — scan or paste it in GPay, PhonePe, Paytm or any UPI app."}
             </p>
           )}
           {iosFailedApp && isAppMethod(method) && (
@@ -228,7 +230,7 @@ export default function Donate() {
             </p>
           )}
 
-          {isMobile && (method === "upi" || isAppMethod(method)) && (
+          {false && (
             <div className="upi-apps">
               <p className="hint" style={{ marginBottom: ".5rem" }}>Or pay directly with an app:</p>
               <div className="upi-apps__row">
@@ -290,7 +292,10 @@ export default function Donate() {
               <span className="copy-row__btn" aria-hidden="true">Copy</span>
             </button>
             {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
-            {isMobile && (
+            <p className="text-sm text-center" style={{ color: "var(--ink-soft)" }}>
+              Open GPay, PhonePe, Paytm or any UPI app → <strong>Scan QR</strong> (or <strong>Pay UPI ID</strong> and paste) → enter ₹{fmt(amount || 0)}.
+            </p>
+            {false && (
               <div className="flex flex-col gap-2 w-full">
                 {PAY_APPS.map((app) => (
                   <a
