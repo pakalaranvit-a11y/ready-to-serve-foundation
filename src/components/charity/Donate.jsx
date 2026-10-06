@@ -192,14 +192,11 @@ export default function Donate() {
               disabled={!amount}
               onClick={() => {
                 if (!amount) return;
-                if (!isMobile) { setShowPay(true); return; }
-                window.location.href = upiAppLink(method, amount, noteFor(frequency));
-                watchAppOpen(method);
+                if (isMobile) copyUpi(setModalCopied);
+                setShowPay(true);
               }}
             >
-              {isMobile
-                ? `Pay ₹${fmt(amount || 0)} with ${METHOD_LABELS[method]}`
-                : `Show QR to pay ₹${fmt(amount || 0)} with ${METHOD_LABELS[method]}`}
+              {`Pay ₹${fmt(amount || 0)} with ${METHOD_LABELS[method]}`}
             </button>
           ) : (
             <button
@@ -216,7 +213,7 @@ export default function Donate() {
             <p className="hint">
               {isAppMethod(method)
                 ? isMobile
-                  ? `Opens ${METHOD_LABELS[method]} on this phone with the amount filled in. If it isn't installed, we'll show a QR instead.`
+                  ? `Copies our UPI ID — then open ${METHOD_LABELS[method]}, choose "Pay to UPI ID", paste and enter the amount.`
                   : `${METHOD_LABELS[method]} only opens on a phone. On a laptop, scan the QR with ${METHOD_LABELS[method]} on your phone.`
                 : "Shows a QR and UPI ID — scan or paste it in PhonePe, Google Pay, Paytm or any UPI app."}
             </p>
@@ -292,6 +289,11 @@ export default function Donate() {
               <span className="copy-row__btn" aria-hidden="true">Copy</span>
             </button>
             {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
+            {isMobile && qrUrl && (
+              <a href={qrUrl} download="ReadyToServe-UPI-QR.png" className="btn btn--ghost btn--sm btn--block">
+                Save QR to photos (scan it from {METHOD_LABELS[method] || "your app"} → Upload QR)
+              </a>
+            )}
             <p className="text-sm text-center" style={{ color: "var(--ink-soft)" }}>
               Open {METHOD_LABELS[method] || "your UPI app"} → <strong>Scan QR</strong> (or <strong>Pay UPI ID</strong> and paste) → enter ₹{fmt(amount || 0)}.
             </p>
