@@ -23,10 +23,10 @@ const PAY_APPS = [
 
 // UPI app deep links are blocked by GPay/PhonePe/Paytm for this account, so UPI is
 // offered only as scan-the-QR / copy-the-UPI-ID, which works in every UPI app.
-const METHODS = ["upi", "paypal", "bank"];
+const METHODS = ["phonepe", "gpay", "paytm", "paypal", "bank"];
 const METHOD_LABELS = {
   upi: "UPI (PhonePe / Google Pay / Paytm)",
-  gpay: "GPay",
+  gpay: "Google Pay",
   phonepe: "PhonePe",
   paytm: "Paytm",
   paypal: "Card / PayPal / Venmo",
@@ -43,7 +43,7 @@ export default function Donate() {
   const [qrUrl, setQrUrl] = useState("");
   const [qrError, setQrError] = useState(false);
   const inputRef = useRef(null);
-  const [payMethod, setPayMethod] = useState("upi");
+  const [payMethod, setPayMethod] = useState("phonepe");
   const [iosFailedApp, setIosFailedApp] = useState(null);
 
   const { isAndroid, isMobile } = useMemo(() => {
@@ -245,7 +245,7 @@ export default function Donate() {
 
           {method !== "bank" && <PaymentClaimForm amount={amount} method={METHOD_LABELS[method]} />}
 
-          {METHODS.includes("upi") && (<div className="qr-block">
+          {isAppMethod(method) && (<div className="qr-block">
             <div className="qr-block__code" aria-label="UPI QR code">
               {qrUrl ? (
                 <img src={qrUrl} alt="UPI QR code" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
@@ -254,7 +254,7 @@ export default function Donate() {
               )}
             </div>
             <div className="qr-block__copy">
-              <p className="qr-block__lead">On a laptop? <strong>Scan to pay</strong> with PhonePe, Google Pay, Paytm or any UPI app.</p>
+              <p className="qr-block__lead">On a laptop? <strong>Scan to pay</strong> with {METHOD_LABELS[method]}.</p>
               <button className="copy-row" type="button" onClick={() => copyUpi(setCopied)}>
                 <span className="copy-row__label">UPI ID</span>
                 <span className="copy-row__value">{CONFIG.upiId}</span>
@@ -272,10 +272,10 @@ export default function Donate() {
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle>
-              {frequency === "monthly" ? "Set up" : "Pay"} ₹{fmt(amount || 0)}{frequency === "monthly" ? " / month" : ""} via PhonePe / Google Pay / Paytm
+              {frequency === "monthly" ? "Set up" : "Pay"} ₹{fmt(amount || 0)}{frequency === "monthly" ? " / month" : ""} via {METHOD_LABELS[method] || "UPI"}
             </DialogTitle>
             <DialogDescription>
-              Scan this code with PhonePe, Google Pay, Paytm or any UPI app to complete your donation.
+              Scan this code with {METHOD_LABELS[method] || "any UPI app"} to complete your donation.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center gap-4 py-2">
@@ -293,7 +293,7 @@ export default function Donate() {
             </button>
             {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
             <p className="text-sm text-center" style={{ color: "var(--ink-soft)" }}>
-              Open PhonePe, Google Pay, Paytm or any UPI app → <strong>Scan QR</strong> (or <strong>Pay UPI ID</strong> and paste) → enter ₹{fmt(amount || 0)}.
+              Open {METHOD_LABELS[method] || "your UPI app"} → <strong>Scan QR</strong> (or <strong>Pay UPI ID</strong> and paste) → enter ₹{fmt(amount || 0)}.
             </p>
             {false && (
               <div className="flex flex-col gap-2 w-full">
