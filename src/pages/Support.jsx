@@ -80,7 +80,7 @@ export default function Support() {
           }}>
             <h2 style={{ fontSize: "1.1rem", marginBottom: ".8rem" }}>Donations &amp; receipts</h2>
             <p style={{ color: "var(--ink-soft)", margin: 0 }}>
-              All donations are made directly via UPI to our {CONFIG.bank.bankName} account and
+              All donations are made directly via UPI (PhonePe, Google Pay, Paytm) to our {CONFIG.bank.bankName} account and
               are eligible for 80G tax exemption. For a receipt or any donation-related question,
               call us at the number above.
             </p>

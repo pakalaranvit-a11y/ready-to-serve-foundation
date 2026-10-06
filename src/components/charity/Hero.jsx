@@ -62,7 +62,7 @@ export default function Hero() {
           <a className="hero__quick-btn hero__quick-btn--ig" href={CONFIG.social?.instagram} target="_blank" rel="noopener">
             <Instagram size={16} /> Instagram
           </a>
-          <a className="hero__quick-btn" href="#donate">Pay by UPI (GPay / PhonePe / Paytm)</a>
+          <a className="hero__quick-btn" href="#donate">Pay by PhonePe / Google Pay / Paytm</a>
           {CONFIG.social?.facebook && (
             <a className="hero__quick-btn hero__quick-btn--fb" href={CONFIG.social.facebook} target="_blank" rel="noopener">
               <Facebook size={16} /> Facebook

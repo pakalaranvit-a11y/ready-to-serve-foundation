@@ -25,7 +25,7 @@ const PAY_APPS = [
 // offered only as scan-the-QR / copy-the-UPI-ID, which works in every UPI app.
 const METHODS = ["upi", "paypal", "bank"];
 const METHOD_LABELS = {
-  upi: "UPI / QR",
+  upi: "UPI (PhonePe / Google Pay / Paytm)",
   gpay: "GPay",
   phonepe: "PhonePe",
   paytm: "Paytm",
@@ -110,7 +110,7 @@ export default function Donate() {
           <span className="kicker kicker--light">Give in 30 seconds</span>
           <h2>Send your gift <em>directly</em> to the home</h2>
           <p>
-            We use <strong>UPI</strong> so your money lands <strong>instantly and directly</strong> in the foundation's bank account — no fees, no middle-man, 100% reaches the elders. Giving from abroad? Use <strong>PayPal</strong>.
+            We use <strong>UPI (PhonePe, Google Pay, Paytm)</strong> so your money lands <strong>instantly and directly</strong> in the foundation's bank account — no fees, no middle-man, 100% reaches the elders. Giving from abroad? Use <strong>PayPal</strong>.
           </p>
           <ul className="donate__assure" role="list">
             <li><svg viewBox="0 0 24 24" className="i"><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" /></svg>Instant &amp; direct bank-to-bank</li>
@@ -208,7 +208,7 @@ export default function Donate() {
               className={`btn btn--primary btn--lg btn--block ${!amount ? "is-disabled" : ""}`}
               disabled={!amount}
             >
-              {`${frequency === "monthly" ? "Set up " : "Pay "}₹${fmt(amount || 0)}${frequency === "monthly" ? " / month" : ""} via UPI`}
+              {`${frequency === "monthly" ? "Set up " : "Pay "}₹${fmt(amount || 0)}${frequency === "monthly" ? " / month" : ""} via PhonePe / Google Pay / Paytm`}
             </button>
           )}
 
@@ -218,7 +218,7 @@ export default function Donate() {
                 ? isMobile
                   ? `Opens ${METHOD_LABELS[method]} on this phone with the amount filled in. If it isn't installed, we'll show a QR instead.`
                   : `${METHOD_LABELS[method]} only opens on a phone. On a laptop, scan the QR with ${METHOD_LABELS[method]} on your phone.`
-                : "Shows a QR and UPI ID — scan or paste it in GPay, PhonePe, Paytm or any UPI app."}
+                : "Shows a QR and UPI ID — scan or paste it in PhonePe, Google Pay, Paytm or any UPI app."}
             </p>
           )}
           {iosFailedApp && isAppMethod(method) && (
@@ -254,7 +254,7 @@ export default function Donate() {
               )}
             </div>
             <div className="qr-block__copy">
-              <p className="qr-block__lead">On a laptop? <strong>Scan to pay</strong> with any UPI app.</p>
+              <p className="qr-block__lead">On a laptop? <strong>Scan to pay</strong> with PhonePe, Google Pay, Paytm or any UPI app.</p>
               <button className="copy-row" type="button" onClick={() => copyUpi(setCopied)}>
                 <span className="copy-row__label">UPI ID</span>
                 <span className="copy-row__value">{CONFIG.upiId}</span>
@@ -272,10 +272,10 @@ export default function Donate() {
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle>
-              {frequency === "monthly" ? "Set up" : "Pay"} ₹{fmt(amount || 0)}{frequency === "monthly" ? " / month" : ""} via UPI
+              {frequency === "monthly" ? "Set up" : "Pay"} ₹{fmt(amount || 0)}{frequency === "monthly" ? " / month" : ""} via PhonePe / Google Pay / Paytm
             </DialogTitle>
             <DialogDescription>
-              Scan this code with any UPI app{isAndroid ? " — or tap a button below to open your UPI app" : ""} to complete your donation.
+              Scan this code with PhonePe, Google Pay, Paytm or any UPI app to complete your donation.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center gap-4 py-2">
@@ -293,7 +293,7 @@ export default function Donate() {
             </button>
             {modalCopied && <p className="copied text-center">Copied ✓ — paste it into your UPI app</p>}
             <p className="text-sm text-center" style={{ color: "var(--ink-soft)" }}>
-              Open GPay, PhonePe, Paytm or any UPI app → <strong>Scan QR</strong> (or <strong>Pay UPI ID</strong> and paste) → enter ₹{fmt(amount || 0)}.
+              Open PhonePe, Google Pay, Paytm or any UPI app → <strong>Scan QR</strong> (or <strong>Pay UPI ID</strong> and paste) → enter ₹{fmt(amount || 0)}.
             </p>
             {false && (
               <div className="flex flex-col gap-2 w-full">
