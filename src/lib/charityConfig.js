@@ -17,7 +17,7 @@ export const CONFIG = {
     cta: "Sponsor 1 sq ft",
   },
   taxExemption: "Donations are eligible for tax exemption u/s 80G of the Income Tax Act, 1961.",
-  upiId: "rsfoundation@icici",
+  upiId: "9701295527@ybl",
   upiPayeeName: "Ready To Serve Foundation",
   // Merchant category code — 8398 = charitable & social service organisations.
   upiMerchantCode: "8398",

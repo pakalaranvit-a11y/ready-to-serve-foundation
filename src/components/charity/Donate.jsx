@@ -24,7 +24,7 @@ const PAY_APPS = [
 // UPI app deep links are blocked by GPay/PhonePe/Paytm for this account, so UPI is
 // offered only as scan-the-QR / copy-the-UPI-ID, which works in every UPI app.
 // UPI hidden: the bank reports rsfoundation@icici as "unavailable". Add "upi" back once ICICI fixes it.
-const METHODS = ["paypal", "bank"];
+const METHODS = ["upi", "paypal", "bank"];
 const METHOD_LABELS = {
   upi: "UPI / QR",
   gpay: "GPay",
