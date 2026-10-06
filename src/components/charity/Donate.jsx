@@ -185,6 +185,14 @@ export default function Donate() {
             <BankTransferPanel amount={amount} donorName="" />
           ) : method === "paypal" ? (
             <PayPalPanel />
+          ) : isAppMethod(method) && isMobile && CONFIG.upiIsMerchant ? (
+            <a
+              className="btn btn--primary btn--lg btn--block"
+              href={amount ? upiAppLink(method, amount, noteFor(frequency)) : undefined}
+              onClick={() => amount && watchAppOpen(method)}
+            >
+              {`Pay ₹${fmt(amount || 0)} with ${METHOD_LABELS[method]}`} <span aria-hidden="true">→</span>
+            </a>
           ) : isAppMethod(method) ? (
             <button
               type="button"
@@ -213,7 +221,9 @@ export default function Donate() {
             <p className="hint">
               {isAppMethod(method)
                 ? isMobile
-                  ? `Copies our UPI ID — then open ${METHOD_LABELS[method]}, choose "Pay to UPI ID", paste and enter the amount.`
+                  ? CONFIG.upiIsMerchant
+                    ? `Opens ${METHOD_LABELS[method]} with the amount filled in — just enter your UPI PIN.`
+                    : `Copies our UPI ID — then open ${METHOD_LABELS[method]}, choose "Pay to UPI ID", paste and enter the amount.`
                   : `${METHOD_LABELS[method]} only opens on a phone. On a laptop, scan the QR with ${METHOD_LABELS[method]} on your phone.`
                 : "Shows a QR and UPI ID — scan or paste it in PhonePe, Google Pay, Paytm or any UPI app."}
             </p>

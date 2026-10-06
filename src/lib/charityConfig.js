@@ -19,6 +19,9 @@ export const CONFIG = {
   taxExemption: "Donations are eligible for tax exemption u/s 80G of the Income Tax Act, 1961.",
   upiId: "9701295527@ybl",
   upiPayeeName: "Ready To Serve Foundation",
+  // Set to true once upiId above is a BUSINESS (merchant) UPI ID from PhonePe Business /
+  // Google Pay for Business. This turns on one-tap "open the app" payment buttons on phones.
+  upiIsMerchant: false,
   // Merchant category code — 8398 = charitable & social service organisations.
   upiMerchantCode: "8398",
   bank: { accountName: "M/s. Ready To Serve Foundation", accountNumber: "030405003401", ifsc: "ICIC0000304", bankName: "ICICI Bank", branch: "Vanasthalipuram" },
