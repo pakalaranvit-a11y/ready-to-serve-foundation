@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 
-const ROOT_TABS = ["/", "/donate", "/donors", "/settings"];
+const ROOT_TABS = ["/", "/impact", "/stories", "/donate", "/more"];
 
 export default function BackHeader({ title }) {
   const navigate = useNavigate();
