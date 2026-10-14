@@ -8,7 +8,7 @@ export default function About() {
         <div className="about__media" data-reveal="">
           <img
             className="media-card"
-            src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/3b289d61d_PHOTO-2026-07-18-13-10-21.jpg"
+            src="https://media.base44.com/images/public/6a4bf7eda7bc99837f34a772/b76aef8f7_PHOTO-2026-10-14-08-52-46.jpg"
             alt="Residents and staff of the Ready To Serve Foundation standing together inside the home"
           />
           <span className="media-card__tag">Inside our home, Vanasthalipuram</span>
