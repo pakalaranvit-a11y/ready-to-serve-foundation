@@ -38,7 +38,7 @@ export default function BankTransferPanel({ amount, donorName }) {
     if (!name.trim() || !amount) return;
     setSending(true);
     try {
-      await base44.functions.invoke("submitBankTransfer", {
+      await base44.entities.BankTransfer.create({
         donor_name: name.trim(),
         amount,
         reference: reference.trim(),

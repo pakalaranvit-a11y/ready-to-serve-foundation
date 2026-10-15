@@ -19,11 +19,11 @@ export default function PaymentClaimForm({ amount, method }) {
     if (!amount || busy) return;
     setBusy(true);
     try {
-      await base44.functions.invoke("submitBankTransfer", {
+      await base44.entities.BankTransfer.create({
         donor_name: anon ? "Anonymous" : (name.trim() || "Anonymous"),
         amount,
         reference: ref.trim(),
-        message: `[${method}] ${msg.trim()}`,
+        message: `[${method}] ${msg.trim()}`.slice(0, 200),
       });
       addGift({ amount, method });
       setDone(true);
