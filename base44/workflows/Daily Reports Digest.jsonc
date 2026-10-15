@@ -1,0 +1,44 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 8 * * *",
+      "one_time_date": null,
+      "timezone": "America/Chicago",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "daily_reports_digest",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "digest": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "dailyReportsDigest"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Clean up and email summary",
+            "description": "Daily at 8am"
+          }
+        }
+      }
+    ]
+  },
+  "name": "Daily Reports Digest",
+  "description": "Every morning: cleans up old reports and emails admins a summary of new ones"
+}
