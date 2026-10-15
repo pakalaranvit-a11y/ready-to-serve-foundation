@@ -25,8 +25,9 @@ export default async function (req) {
     const pending = await BT.count({ status: "pending" });
     if (!items.length) return Response.json({ sent: false, new: 0, pending });
 
+    const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
     const rows = items
-      .map((r) => `<li><b>${r.donor_name}</b> — ₹${r.amount}${r.reference ? ` (ref ${r.reference})` : ""}${r.message ? ` — ${r.message}` : ""}</li>`)
+      .map((r) => `<li><b>${esc(r.donor_name)}</b> — ₹${esc(r.amount)}${r.reference ? ` (ref ${esc(r.reference)})` : ""}${r.message ? ` — ${esc(r.message)}` : ""}</li>`)
       .join("");
     const html = `<h2>${items.length} new payment report(s) in the last 24 hours</h2><ul>${rows}</ul><p>${pending} report(s) are waiting to be checked against your bank / UPI statement.</p><p><a href="https://ready-to-serve.base44.app">Open the app</a></p>`;
 
