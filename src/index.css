@@ -117,7 +117,7 @@
   --font-head:"Georgia",serif,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji";
   --font-body-c:-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Roboto,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji";
 }
-html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+html { -webkit-text-size-adjust:100%; text-size-adjust:100%; color-scheme:light; }
 
 .charity-site {
   font-family:var(--font-body-c);
