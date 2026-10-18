@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Home as HomeIcon, Heart, BarChart3, BookOpen, Menu } from "lucide-react";
 import { useIsKeyboardActive } from "@/hooks/use-mobile";
 import { DONATE_URL, openDonate, isNativeApp } from "@/lib/openDonate";
+import { tap } from "@/lib/native";
 
 const TABS = [
   { key: "home", label: "Home", path: "/", icon: HomeIcon },
@@ -67,6 +68,7 @@ export default function BottomTabs() {
             className={`bottom-tab ${isActive ? "is-active" : ""}`}
             aria-current={isActive ? "page" : undefined}
             onClick={(e) => {
+              tap();
               if (target === location.pathname) {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: "smooth" });

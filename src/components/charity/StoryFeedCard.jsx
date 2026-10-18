@@ -1,12 +1,12 @@
 import React from "react";
 import { Bookmark, Share2 } from "lucide-react";
+import { shareContent, tap } from "@/lib/native";
 
 export default function StoryFeedCard({ story, saved, onToggleSave }) {
   const share = async () => {
     const url = story.link || window.location.origin + "/stories";
-    if (navigator.share) {
-      await navigator.share({ title: story.title, text: story.body, url }).catch(() => {});
-    } else {
+    tap();
+    if (!(await shareContent({ title: story.title, text: story.body, url }))) {
       await navigator.clipboard?.writeText(url);
       alert("Link copied");
     }
@@ -19,7 +19,7 @@ export default function StoryFeedCard({ story, saved, onToggleSave }) {
         <h3 style={{ fontSize: "1.2rem", marginBottom: ".4rem" }}>{story.title}</h3>
         <p style={{ color: "var(--ink-soft)", margin: "0 0 .8rem" }}>{story.body}</p>
         <div style={{ display: "flex", gap: ".5rem" }}>
-          <button type="button" className="btn btn--ghost btn--sm" style={{ minHeight: 44 }} onClick={onToggleSave} aria-pressed={saved}>
+          <button type="button" className="btn btn--ghost btn--sm" style={{ minHeight: 44 }} onClick={() => { tap(); onToggleSave(); }} aria-pressed={saved}>
             <Bookmark size={18} fill={saved ? "currentColor" : "none"} /> {saved ? "Saved" : "Save"}
           </button>
           <button type="button" className="btn btn--ghost btn--sm" style={{ minHeight: 44 }} onClick={share}>
