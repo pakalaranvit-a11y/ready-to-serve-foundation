@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </h1>
         <p style={{ color: "var(--ink-soft)", marginBottom: "2rem" }}>
-          Last updated: August 2, 2026
+          Last updated: October 18, 2026
         </p>
 
         <div className="prose" style={{ color: "var(--ink)", lineHeight: 1.7 }}>
@@ -30,7 +30,10 @@ export default function PrivacyPolicy() {
             <li>Your name (optional — you may donate anonymously).</li>
             <li>An optional message for the elders.</li>
             <li>The donation amount and frequency (one-time or monthly).</li>
+            <li>An optional transaction / UTR reference, and an optional phone number or email so we can confirm your gift.</li>
+            <li>If you choose to create an account (optional), your email address.</li>
           </ul>
+          <p>Stories you save and your personal giving history are stored only on your device.</p>
           <p>
             Technical information such as device type and browser may also be collected
             automatically to keep the App secure and reliable.
@@ -50,7 +53,8 @@ export default function PrivacyPolicy() {
             Payments
           </h2>
           <p>
-            Donations are made directly through UPI to the foundation's bank account
+            In the iOS and Android apps, no payments are taken inside the app; donating opens our
+            website in your browser. Donations are made directly through UPI to the foundation's bank account
             ({CONFIG.bank.bankName}, A/C ending{" "}
             {CONFIG.bank.accountNumber.slice(-4)}). We do <strong>not</strong> collect, process,
             or store any card numbers, bank credentials, or payment-card data within the App.
@@ -71,7 +75,8 @@ export default function PrivacyPolicy() {
           </h2>
           <p>
             You may request access to, correction of, or deletion of your personal data at any
-            time by contacting us using the details below. Anonymous donations leave only the
+            time by contacting us using the details below. If you have an account, you can also
+            request deletion in the App under Settings → Request account deletion. Anonymous donations leave only the
             donation amount and frequency — no personally identifying information.
           </p>
 
