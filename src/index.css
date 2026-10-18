@@ -114,9 +114,10 @@
   --radius-lg:26px;
   --maxw:1140px;
   --ease:cubic-bezier(.22,.61,.36,1);
-  --font-head:"Georgia",serif;
-  --font-body-c:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-head:"Georgia",serif,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji";
+  --font-body-c:-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Roboto,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji";
 }
+html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 
 .charity-site {
   font-family:var(--font-body-c);
