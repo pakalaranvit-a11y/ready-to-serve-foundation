@@ -11,6 +11,8 @@ import { CONFIG, fmt, upiLink, upiAppLink } from "@/lib/charityConfig";
 import BankTransferPanel from "@/components/charity/BankTransferPanel";
 import PayPalPanel from "@/components/charity/PayPalPanel";
 import PaymentClaimForm from "@/components/charity/PaymentClaimForm";
+import NativeDonateHandoff from "@/components/charity/NativeDonateHandoff";
+import { isNativeApp } from "@/lib/openDonate";
 
 const noteFor = (frequency) =>
   frequency === "monthly" ? `Monthly donation to ${CONFIG.orgName}` : `Donation to ${CONFIG.orgName}`;
@@ -34,7 +36,12 @@ const METHOD_LABELS = {
 };
 const isAppMethod = (m) => ["gpay", "phonepe", "paytm"].includes(m);
 
+// App Store 3.2.2: inside the native app, no in-app payment UI — hand off to Safari.
 export default function Donate() {
+  return isNativeApp() ? <NativeDonateHandoff /> : <DonateInline />;
+}
+
+function DonateInline() {
   const [amount, setAmountState] = useState(CONFIG.defaultAmount);
   const [frequency, setFrequency] = useState("one_time");
   const [copied, setCopied] = useState(false);
