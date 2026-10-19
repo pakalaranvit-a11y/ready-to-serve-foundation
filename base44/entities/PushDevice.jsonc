@@ -1,0 +1,46 @@
+{
+  "name": "PushDevice",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "description": "APNs device token (hex)"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "ios"
+      ],
+      "default": "ios"
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "token"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

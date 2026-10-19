@@ -1,0 +1,40 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "Notification"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "push_new_notifications",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "push": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendPushNotification",
+            "args": {
+              "id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send push alert",
+            "description": "Alert every registered iPhone"
+          }
+        }
+      }
+    ]
+  },
+  "name": "Push New Notifications",
+  "description": "Sends each new update from the home to the iOS app as a push notification"
+}

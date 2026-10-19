@@ -26,8 +26,14 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
+import { usePushNotifications } from "@/lib/usePushNotifications";
 
 const HIDE_TABS = ["/login", "/register", "/forgot-password", "/reset-password"];
+
+const PushSetup = () => {
+  usePushNotifications();
+  return null;
+};
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -81,6 +87,7 @@ const AuthenticatedApp = () => {
   const showTabs = !HIDE_TABS.includes(location.pathname);
   return (
     <>
+      <PushSetup />
       <AnimatedRoutes />
       {showTabs && <BottomTabs />}
     </>

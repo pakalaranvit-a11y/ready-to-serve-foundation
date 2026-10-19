@@ -22,13 +22,22 @@
     "link": {
       "type": "string",
       "default": ""
+    },
+    "pushed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this was sent as a push alert"
     }
   },
   "required": [
     "title"
   ],
   "rls": {
-    "create": true,
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
     "read": true,
     "update": {
       "user_condition": {
