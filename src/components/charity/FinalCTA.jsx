@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Share2 } from "lucide-react";
 import { CONFIG } from "@/lib/charityConfig";
+import { shareContent, tap } from "@/lib/native";
 import DonateNowButton from "@/components/charity/DonateNowButton";
 
 export default function FinalCTA() {
@@ -13,8 +14,9 @@ export default function FinalCTA() {
       url: window.location.origin,
     };
     try {
-      if (navigator.share) {
-        await navigator.share(data);
+      tap();
+      if (await shareContent(data)) {
+        /* shared via native or web share sheet */
       } else if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(`${data.text} ${data.url}`);
         setShared(true);
