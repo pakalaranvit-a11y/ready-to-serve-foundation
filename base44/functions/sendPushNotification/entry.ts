@@ -1,17 +1,20 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.52";
+import { secrets } from "base44:runtime";
 import { requireAdmin } from "../../shared/requireAdmin.ts";
 
 // Sends a new Notification to every registered iPhone through Apple Push (APNs).
 // Secrets: APNS_KEY_ID, APNS_TEAM_ID, APNS_PRIVATE_KEY (contents of the .p8 file),
 // optional APNS_BUNDLE_ID (defaults to the app's bundle ID).
-const BUNDLE_ID = Deno.env.get("APNS_BUNDLE_ID") || "org.readytoserve.foundation";
+const DEFAULT_BUNDLE_ID = "org.readytoserve.foundation";
 const HOSTS = ["https://api.push.apple.com", "https://api.sandbox.push.apple.com"];
 
 const b64url = (bytes) =>
   btoa(String.fromCharCode(...new Uint8Array(bytes))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
 async function apnsJwt(keyId, teamId, pem) {
-  const der = Uint8Array.from(atob(pem.replace(/-----[^-]+-----|\s/g, "")), (c) => c.charCodeAt(0));
+  // Accepts the .p8 file as-is, flattened onto one line, or with literal "\n" escapes.
+  const body = pem.replace(/\\n/g, "\n").replace(/-----[^-]+-----|\s/g, "");
+  const der = Uint8Array.from(atob(body), (c) => c.charCodeAt(0));
   const key = await crypto.subtle.importKey("pkcs8", der, { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]);
   const enc = new TextEncoder();
   const head = b64url(enc.encode(JSON.stringify({ alg: "ES256", kid: keyId })));
@@ -21,14 +24,14 @@ async function apnsJwt(keyId, teamId, pem) {
 }
 
 // Tries production first, then sandbox (builds run straight from Xcode use sandbox tokens).
-async function sendOne(jwt, token, body) {
+async function sendOne(jwt, bundleId, token, body) {
   let reason = "";
   for (const host of HOSTS) {
     const res = await fetch(`${host}/3/device/${token}`, {
       method: "POST",
       headers: {
         authorization: `bearer ${jwt}`,
-        "apns-topic": BUNDLE_ID,
+        "apns-topic": bundleId,
         "apns-push-type": "alert",
         "apns-priority": "10",
       },
@@ -48,9 +51,10 @@ export default async function (req) {
     const denied = await requireAdmin(base44);
     if (denied) return denied;
 
-    const keyId = Deno.env.get("APNS_KEY_ID");
-    const teamId = Deno.env.get("APNS_TEAM_ID");
-    const pem = Deno.env.get("APNS_PRIVATE_KEY");
+    const keyId = secrets.get("APNS_KEY_ID");
+    const teamId = secrets.get("APNS_TEAM_ID");
+    const pem = secrets.get("APNS_PRIVATE_KEY");
+    const bundleId = secrets.get("APNS_BUNDLE_ID") || DEFAULT_BUNDLE_ID;
     if (!keyId || !teamId || !pem) return Response.json({ error: "APNs secrets not set" }, { status: 500 });
 
     const { id } = await req.json();
@@ -74,7 +78,7 @@ export default async function (req) {
     const errors = {};
     for (let i = 0; i < devices.length; i += 20) {
       const batch = devices.slice(i, i + 20);
-      const results = await Promise.all(batch.map((d) => sendOne(jwt, d.token, body).catch((e) => ({ ok: false, reason: e.message }))));
+      const results = await Promise.all(batch.map((d) => sendOne(jwt, bundleId, d.token, body).catch((e) => ({ ok: false, reason: e.message }))));
       await Promise.allSettled(
         results.map((r, j) => {
           if (r.ok) sent++;
