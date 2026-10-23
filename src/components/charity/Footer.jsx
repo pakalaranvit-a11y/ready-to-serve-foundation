@@ -58,7 +58,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="wrap footer__base">
-        <span>© {new Date().getFullYear()} Ready To Serve Foundation. Made with care.</span>
+        <span>© {new Date().getFullYear()} Ready To Serve Foundation. App built by Ranvit Pakala.</span>
         <span>
           <Link to="/privacy" style={{ marginRight: "1rem" }}>Privacy Policy</Link>
           <Link to="/support">Support</Link>
