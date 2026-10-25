@@ -4,10 +4,8 @@ export const DONATE_URL = "https://ready-to-serve.base44.app/donate";
 
 export function isNativeApp() {
   if (typeof window === "undefined") return false;
-  if (window.Capacitor?.isNativePlatform?.() || window.ReactNativeWebView || window.cordova) return true;
-  const ua = navigator.userAgent || "";
-  // iOS WKWebView (no "Safari" token) or Android WebView ("; wv)").
-  return (/iPhone|iPad|iPod/.test(ua) && !/Safari/.test(ua)) || /; wv\)/.test(ua);
+  // Only our real native app — not WhatsApp/Instagram/Facebook in-app browsers.
+  return !!window.Capacitor?.isNativePlatform?.();
 }
 
 export function openDonate(e) {
