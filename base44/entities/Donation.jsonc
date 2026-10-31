@@ -3,10 +3,13 @@
   "type": "object",
   "properties": {
     "donor_name": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 60
     },
     "amount": {
-      "type": "number"
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10000000
     },
     "frequency": {
       "type": "string",
@@ -18,7 +21,8 @@
     },
     "message": {
       "type": "string",
-      "default": ""
+      "default": "",
+      "maxLength": 200
     },
     "is_anonymous": {
       "type": "boolean",
@@ -30,7 +34,11 @@
     "amount"
   ],
   "rls": {
-    "create": true,
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
     "read": true,
     "update": {
       "user_condition": {
