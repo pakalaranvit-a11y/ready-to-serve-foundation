@@ -1,0 +1,41 @@
+{
+  "name": "Hide Anonymous Donor Names",
+  "description": "Replaces the real name with 'Anonymous' whenever a donation is marked anonymous",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "entity_name": "Donation",
+      "events": [
+        "create",
+        "update"
+      ]
+    },
+    "condition": "${ .trigger.data.is_anonymous == true and .trigger.data.donor_name != \"Anonymous\" }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "hide_anonymous_donor_names",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "anonymize": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "anonymizeDonation",
+            "args": {
+              "id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Hide real name",
+            "description": "Set name to Anonymous"
+          }
+        }
+      }
+    ]
+  }
+}
