@@ -7,6 +7,8 @@ const devServerUrl = process.env.CAP_SERVER_URL;
 const config: CapacitorConfig = {
   appId: 'org.readytoserve.foundation',
   appName: 'Ready To Serve',
+  // Lets the web code always recognise the native app, so donations hand off to Safari.
+  appendUserAgent: 'ReadyToServeApp',
   webDir: 'dist',
   server: devServerUrl
     ? { url: devServerUrl, cleartext: true }

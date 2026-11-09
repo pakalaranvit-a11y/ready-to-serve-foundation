@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { CONFIG } from "@/lib/charityConfig";
 import BackHeader from "@/components/charity/BackHeader";
+import { isNativeApp } from "@/lib/openDonate";
 
 export default function Support() {
   return (
@@ -80,8 +81,9 @@ export default function Support() {
           }}>
             <h2 style={{ fontSize: "1.1rem", marginBottom: ".8rem" }}>Donations &amp; receipts</h2>
             <p style={{ color: "var(--ink-soft)", margin: 0 }}>
-              All donations are made directly via UPI (PhonePe, Google Pay, Paytm) to our {CONFIG.bank.bankName} account and
-              are eligible for 80G tax exemption. For a receipt or any donation-related question,
+              {isNativeApp()
+                ? "Donations are made on our website in your browser, never inside this app, and are eligible for 80G tax exemption."
+                : `All donations are made directly via UPI (PhonePe, Google Pay, Paytm) to our ${CONFIG.bank.bankName} account and are eligible for 80G tax exemption.`} For a receipt or any donation-related question,
               call us at the number above.
             </p>
           </div>
