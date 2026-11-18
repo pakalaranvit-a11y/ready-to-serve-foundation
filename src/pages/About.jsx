@@ -4,7 +4,9 @@ import { CONFIG } from "@/lib/charityConfig";
 
 const ROWS = [
   ["Legal name", CONFIG.bank.accountName.replace(/^M\/s\.\s*/, "")],
-  ["Society registration no.", CONFIG.societyRegNo],
+  ["Trust registration no.", CONFIG.societyRegNo],
+  ["PAN", CONFIG.pan],
+  ["CSR registration (MCA)", CONFIG.csrRegNo],
   ["Tax exemption", CONFIG.regNo],
   ["Country of registration", "India (Telangana)"],
   ["Founded", String(CONFIG.foundedYear)],

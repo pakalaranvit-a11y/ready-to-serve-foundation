@@ -7,6 +7,8 @@ export const CONFIG = {
   email: "",
   regNo: "80G URN: AABTR1258HE2024-2025-2027",
   societyRegNo: "46/IV/2011",
+  pan: "AABTR9121Q",
+  csrRegNo: "CSR00024364",
   website: "www.readytoservefoundation.com",
   motto: "We Serve the Needy",
   campaign: {
