@@ -12,7 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@base44/sdk": "^0.8.59",
+    "@base44/sdk": "^0.8.63",
     "@base44/vite-plugin": "^1.0.52",
     "@capacitor/core": "^8.5.3",
     "@capacitor/haptics": "^8.0.2",
